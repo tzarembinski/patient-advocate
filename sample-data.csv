@@ -1,0 +1,16 @@
+Name,Begin date,End date,Category
+Disease Diagnosis,2024-01-15,,Milestones
+Treatment Start,2024-02-01,,Milestones
+Complete Response,2024-08-15,,Milestones
+Line 1 End,2024-08-30,,Milestones
+Line 2 Start,2024-09-01,,Milestones
+ctDNA Test 1,2024-01-20,2024-01-25,Ext. Biomarker Assess
+ctDNA Test 2,2024-04-01,2024-04-05,Ext. Biomarker Assess
+ctDNA Test 3,2024-07-15,2024-07-20,Ext. Biomarker Assess
+Imaging Study,2024-06-10,2024-06-12,Ext. Biomarker Assess
+Pembrolizumab,2024-02-01,2024-08-30,Line 1
+Bevacizumab,2024-02-01,2024-05-15,Line 1
+Carboplatin + Paclitaxel,2024-09-01,2024-12-31,Line 2
+Neuropathy,2024-10-15,2024-11-30,Complications
+Neutropenia,2024-09-20,2024-09-25,Complications
+Fatigue,2024-11-01,2024-11-15,Complications
