@@ -62,9 +62,43 @@ export default function Timeline({ data }: TimelineProps) {
     // Generate month markers
     const months = eachMonthOfInterval({ start: startDate, end: endDate });
 
+    // Filter out redundant parent activities
+    const filteredData = data.filter((item) => {
+      // Check if this item has "child" items (cycles)
+      // A child is an item in the same category whose name starts with this item's name
+      // and contains "cycle" or "dose" in the remaining part
+      const children = data.filter((otherItem) => {
+        if (otherItem === item) return false;
+        if (otherItem.category !== item.category) return false;
+
+        const parentName = item.name.toLowerCase();
+        const childName = otherItem.name.toLowerCase();
+
+        // Child name must start with parent name
+        if (!childName.startsWith(parentName)) return false;
+
+        // The part after the parent name should contain cycle/dose indicators
+        const remainder = childName.substring(parentName.length).trim();
+        const hasCycleIndicator =
+          remainder.includes('cycle') ||
+          remainder.includes('dose') ||
+          /^(cycle|dose)?\s*\d+/.test(remainder); // starts with optional cycle/dose followed by number
+
+        return hasCycleIndicator;
+      });
+
+      // If this item has children with cycle/dose patterns, it's a redundant parent
+      // Remove it to avoid overlap with the individual cycles
+      if (children.length > 0) {
+        return false; // Filter out this redundant parent
+      }
+
+      return true; // Keep this item
+    });
+
     // Group items by category
     const categorizedData: Record<string, TimelineItem[]> = {};
-    data.forEach((item) => {
+    filteredData.forEach((item) => {
       if (!categorizedData[item.category]) {
         categorizedData[item.category] = [];
       }
@@ -141,7 +175,12 @@ export default function Timeline({ data }: TimelineProps) {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
-      <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Medical Treatment Timeline</h2>
+      <div className="flex items-center justify-between mb-4 md:mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900">Medical Treatment Timeline</h2>
+        <div className="text-xs md:text-sm text-gray-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200">
+          💡 Hover over any milestone or activity to see details
+        </div>
+      </div>
 
       <div className="overflow-x-auto">
         <div id="timeline-container" className="min-w-[600px] md:min-w-[800px]">
@@ -178,8 +217,8 @@ export default function Timeline({ data }: TimelineProps) {
                     </p>
                   </div>
 
-                  {/* Timeline lane - very compact */}
-                  <div className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200 h-[36px] md:h-[42px]`}>
+                  {/* Timeline lane - increased height for better visibility */}
+                  <div className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200 h-[48px] md:h-[56px]`}>
                     {/* Vertical grid lines for months */}
                     {months.map((month, mIndex) => {
                       const position = getMonthPosition(month);
@@ -195,38 +234,80 @@ export default function Timeline({ data }: TimelineProps) {
                     {/* Items in this category */}
                     {items.map((item, itemIndex) => {
                       const position = getItemPosition(item);
+                      const isFirstCategory = catIndex === 0; // Check if this is the first swimlane
 
                       if (position.isMilestone) {
                         return (
-                          <div key={itemIndex} className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group" style={{ left: position.left }}>
-                            {/* Diamond shape */}
-                            <div className={`w-3 h-3 md:w-4 md:h-4 ${colors.border} border-2 bg-white rotate-45 shadow-md relative z-10`}></div>
+                          <div
+                            key={itemIndex}
+                            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group cursor-pointer z-10"
+                            style={{ left: position.left }}
+                          >
+                            {/* Diamond shape with hover effect */}
+                            <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl`}></div>
 
-                            {/* Label directly on/near diamond - semi-transparent */}
-                            <div
-                              className="absolute left-3 top-1/2 -translate-y-1/2 whitespace-nowrap"
-                              style={{ pointerEvents: 'none' }}
-                            >
-                              <div className="text-[9px] md:text-[10px] font-medium text-gray-900 bg-white/70 backdrop-blur-sm px-1.5 py-0.5 rounded shadow-sm border border-gray-300">
-                                <div className="font-semibold leading-tight">{item.name}</div>
-                                <div className="text-gray-700 leading-tight">{format(item.beginDate, "MM/dd")}</div>
+                            {/* Hover tooltip - smart positioning: below for first category, above for others */}
+                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50`}>
+                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm">
+                                <div className="font-bold mb-1">{item.name}</div>
+                                <div className="text-gray-300 text-xs">
+                                  {format(item.beginDate, "MMM dd, yyyy")}
+                                </div>
+                                <div className="text-gray-400 text-xs mt-1">
+                                  {category}
+                                </div>
+                                {/* Tooltip arrow */}
+                                <div className={`absolute ${isFirstCategory ? 'bottom-full' : 'top-full'} left-1/2 -translate-x-1/2 -mt-px`}>
+                                  <div className={`border-4 border-transparent ${isFirstCategory ? 'border-b-gray-900' : 'border-t-gray-900'}`}></div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         );
                       } else {
-                        // Duration bar
+                        // Duration bar with hover effect
                         return (
-                          <div key={itemIndex} className="absolute top-1/2 -translate-y-1/2 group" style={{ left: position.left, width: position.width }}>
-                            {/* Bar */}
-                            <div className={`relative h-5 md:h-6 rounded shadow border-2 ${colors.border}`} style={{ backgroundColor: `rgba(${colors.rgb}, 0.4)` }}>
-                              {/* Label directly on the bar - creative placement */}
-                              <div className="absolute inset-0 flex items-center justify-center px-1">
-                                <div className="text-[9px] md:text-[10px] font-medium text-gray-900 text-center leading-tight bg-white/50 backdrop-blur-sm px-1.5 py-0.5 rounded">
-                                  <div className="font-semibold truncate">{item.name}</div>
-                                  <div className="text-gray-700 truncate">
-                                    {format(item.beginDate, "MM/dd")}{item.endDate && ` - ${format(item.endDate, "MM/dd")}`}
+                          <div
+                            key={itemIndex}
+                            className="absolute top-1/2 -translate-y-1/2 group cursor-pointer z-10"
+                            style={{ left: position.left, width: position.width }}
+                          >
+                            {/* Bar with subtle hover effect */}
+                            <div
+                              className={`relative h-7 md:h-8 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105`}
+                              style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
+                            >
+                              {/* Optional: Show first letter or short indicator on bar for very small bars */}
+                              {position.widthPixels > 30 && (
+                                <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
+                                  <div className="text-[10px] md:text-xs font-bold text-gray-800 truncate px-2">
+                                    {position.widthPixels > 80 ? item.name : item.name.substring(0, 1)}
                                   </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Hover tooltip - smart positioning: below for first category, above for others */}
+                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50`}>
+                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm">
+                                <div className="font-bold mb-1">{item.name}</div>
+                                <div className="text-gray-300 text-xs">
+                                  {position.duration === 0
+                                    ? format(item.beginDate, "MMM dd, yyyy")
+                                    : `${format(item.beginDate, "MMM dd, yyyy")} - ${item.endDate && format(item.endDate, "MMM dd, yyyy")}`
+                                  }
+                                </div>
+                                {position.duration > 0 && (
+                                  <div className="text-gray-400 text-xs mt-1">
+                                    Duration: {position.duration} days
+                                  </div>
+                                )}
+                                <div className="text-gray-400 text-xs">
+                                  {category}
+                                </div>
+                                {/* Tooltip arrow */}
+                                <div className={`absolute ${isFirstCategory ? 'bottom-full' : 'top-full'} left-1/2 -translate-x-1/2 -mt-px`}>
+                                  <div className={`border-4 border-transparent ${isFirstCategory ? 'border-b-gray-900' : 'border-t-gray-900'}`}></div>
                                 </div>
                               </div>
                             </div>

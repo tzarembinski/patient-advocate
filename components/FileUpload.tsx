@@ -16,16 +16,20 @@ export default function FileUpload({ onDataLoaded }: FileUploadProps) {
   const parseDate = (value: any): Date | null => {
     if (!value) return null;
 
-    // If it's already a Date object
+    // If it's already a Date object (XLSX automatically converts some dates)
     if (value instanceof Date) {
+      // Keep it as-is without any timezone conversions
       return value;
     }
 
     // If it's an Excel serial date number
     if (typeof value === "number") {
-      // Excel dates are days since 1900-01-01
-      const date = new Date((value - 25569) * 86400 * 1000);
-      return date;
+      // Excel dates are stored as number of days since December 30, 1899
+      // Convert to JavaScript date
+      const excelEpoch = new Date(1899, 11, 30); // December 30, 1899
+      const msPerDay = 86400000;
+      const dateMs = excelEpoch.getTime() + (value * msPerDay);
+      return new Date(dateMs);
     }
 
     // If it's a string, try to parse it
