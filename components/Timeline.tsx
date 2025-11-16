@@ -6,14 +6,25 @@ import { TimelineItem } from "@/app/page";
 
 interface TimelineProps {
   data: TimelineItem[];
+  onEditEntry: (entry: TimelineItem) => void;
+  onDeleteEntry: (id: string, name: string) => void;
+  hiddenCategories: Set<string>;
+  onToggleCategoryVisibility: (category: string) => void;
 }
 
 // Category color mapping for medical timeline with raw RGB values for cycle shading
 const categoryColors: Record<string, { bg: string; border: string; text: string; rgb: string }> = {
   "Milestones": { bg: "bg-amber-100", border: "border-amber-400", text: "text-amber-900", rgb: "251, 191, 36" },
-  "Ext. Biomarker Assess": { bg: "bg-blue-100", border: "border-blue-400", text: "text-blue-900", rgb: "96, 165, 250" },
-  "Line 1": { bg: "bg-green-100", border: "border-green-400", text: "text-green-900", rgb: "74, 222, 128" },
-  "Line 2": { bg: "bg-purple-100", border: "border-purple-400", text: "text-purple-900", rgb: "192, 132, 252" },
+  "Biomarker Assess": { bg: "bg-blue-100", border: "border-blue-400", text: "text-blue-900", rgb: "96, 165, 250" },
+  "Ext. Biomarker Assess": { bg: "bg-blue-100", border: "border-blue-400", text: "text-blue-900", rgb: "96, 165, 250" }, // Legacy support
+  "Line 1 treatment": { bg: "bg-green-100", border: "border-green-400", text: "text-green-900", rgb: "74, 222, 128" },
+  "Line 1": { bg: "bg-green-100", border: "border-green-400", text: "text-green-900", rgb: "74, 222, 128" }, // Legacy support
+  "Line 2 treatment": { bg: "bg-purple-100", border: "border-purple-400", text: "text-purple-900", rgb: "192, 132, 252" },
+  "Line 2": { bg: "bg-purple-100", border: "border-purple-400", text: "text-purple-900", rgb: "192, 132, 252" }, // Legacy support
+  "Line 3 treatment": { bg: "bg-orange-100", border: "border-orange-400", text: "text-orange-900", rgb: "251, 146, 60" },
+  "Line 3": { bg: "bg-orange-100", border: "border-orange-400", text: "text-orange-900", rgb: "251, 146, 60" }, // Legacy support
+  "Line 4 treatment": { bg: "bg-cyan-100", border: "border-cyan-400", text: "text-cyan-900", rgb: "34, 211, 238" },
+  "Line 4": { bg: "bg-cyan-100", border: "border-cyan-400", text: "text-cyan-900", rgb: "34, 211, 238" }, // Legacy support
   "Complications": { bg: "bg-red-100", border: "border-red-400", text: "text-red-900", rgb: "248, 113, 113" },
 };
 
@@ -26,7 +37,13 @@ const defaultCategoryColors = [
 ];
 
 
-export default function Timeline({ data }: TimelineProps) {
+export default function Timeline({
+  data,
+  onEditEntry,
+  onDeleteEntry,
+  hiddenCategories,
+  onToggleCategoryVisibility,
+}: TimelineProps) {
   const [containerWidth, setContainerWidth] = useState(800);
 
   useEffect(() => {
@@ -175,10 +192,39 @@ export default function Timeline({ data }: TimelineProps) {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
-      <div className="flex items-center justify-between mb-4 md:mb-6">
+      <div className="flex items-center justify-between mb-4 md:mb-6 flex-wrap gap-4">
         <h2 className="text-xl md:text-2xl font-bold text-gray-900">Medical Treatment Timeline</h2>
-        <div className="text-xs md:text-sm text-gray-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200">
-          💡 Hover over any milestone or activity to see details
+
+        <div className="flex items-center gap-4 flex-wrap">
+          {/* Swimlane Visibility Controls */}
+          <div className="bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-gray-600 mr-1">Swimlanes:</span>
+              {sortedCategories.map((category) => {
+                const isVisible = !hiddenCategories.has(category);
+                const colors = getCategoryColor(category, sortedCategories.indexOf(category));
+                return (
+                  <button
+                    key={category}
+                    onClick={() => onToggleCategoryVisibility(category)}
+                    className={`flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium transition-all ${
+                      isVisible
+                        ? `${colors.bg} ${colors.border} border ${colors.text}`
+                        : 'bg-gray-200 text-gray-400 border border-gray-300'
+                    }`}
+                    title={isVisible ? `Hide ${category}` : `Show ${category}`}
+                  >
+                    <span className="text-sm">{isVisible ? '👁️' : '👁️‍🗨️'}</span>
+                    <span className="truncate max-w-[100px]">{category}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="text-xs md:text-sm text-gray-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200">
+            💡 Hover over any milestone or activity to see details
+          </div>
         </div>
       </div>
 
@@ -204,9 +250,9 @@ export default function Timeline({ data }: TimelineProps) {
 
           {/* Swim lanes for each category - VERSION 3: Compact with on-bar labels */}
           <div className="space-y-0.5">
-            {sortedCategories.map((category, catIndex) => {
+            {sortedCategories.filter(cat => !hiddenCategories.has(cat)).map((category, catIndex) => {
               const items = categorizedData[category];
-              const colors = getCategoryColor(category, catIndex);
+              const colors = getCategoryColor(category, sortedCategories.indexOf(category));
 
               return (
                 <div key={category} className="flex relative">
@@ -247,14 +293,29 @@ export default function Timeline({ data }: TimelineProps) {
                             <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl`}></div>
 
                             {/* Hover tooltip - smart positioning: below for first category, above for others */}
-                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50`}>
-                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm">
+                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50`}>
+                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm pointer-events-auto">
                                 <div className="font-bold mb-1">{item.name}</div>
                                 <div className="text-gray-300 text-xs">
                                   {format(item.beginDate, "MMM dd, yyyy")}
                                 </div>
                                 <div className="text-gray-400 text-xs mt-1">
                                   {category}
+                                </div>
+                                {/* Edit and Delete buttons */}
+                                <div className="flex gap-2 mt-2 pt-2 border-t border-gray-700">
+                                  <button
+                                    onClick={() => onEditEntry(item)}
+                                    className="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs font-medium transition-colors"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => onDeleteEntry(item.id, item.name)}
+                                    className="flex-1 px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs font-medium transition-colors"
+                                  >
+                                    Delete
+                                  </button>
                                 </div>
                                 {/* Tooltip arrow */}
                                 <div className={`absolute ${isFirstCategory ? 'bottom-full' : 'top-full'} left-1/2 -translate-x-1/2 -mt-px`}>
@@ -288,8 +349,8 @@ export default function Timeline({ data }: TimelineProps) {
                             </div>
 
                             {/* Hover tooltip - smart positioning: below for first category, above for others */}
-                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50`}>
-                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm">
+                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50`}>
+                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm pointer-events-auto">
                                 <div className="font-bold mb-1">{item.name}</div>
                                 <div className="text-gray-300 text-xs">
                                   {position.duration === 0
@@ -304,6 +365,21 @@ export default function Timeline({ data }: TimelineProps) {
                                 )}
                                 <div className="text-gray-400 text-xs">
                                   {category}
+                                </div>
+                                {/* Edit and Delete buttons */}
+                                <div className="flex gap-2 mt-2 pt-2 border-t border-gray-700">
+                                  <button
+                                    onClick={() => onEditEntry(item)}
+                                    className="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs font-medium transition-colors"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => onDeleteEntry(item.id, item.name)}
+                                    className="flex-1 px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs font-medium transition-colors"
+                                  >
+                                    Delete
+                                  </button>
                                 </div>
                                 {/* Tooltip arrow */}
                                 <div className={`absolute ${isFirstCategory ? 'bottom-full' : 'top-full'} left-1/2 -translate-x-1/2 -mt-px`}>

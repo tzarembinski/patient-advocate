@@ -95,6 +95,7 @@ export default function FileUpload({ onDataLoaded }: FileUploadProps) {
 
           if (parsedBeginDate) {
             timelineItems.push({
+              id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
               name: String(name),
               beginDate: parsedBeginDate,
               endDate: parsedEndDate,
