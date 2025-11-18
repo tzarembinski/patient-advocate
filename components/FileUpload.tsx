@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useImperativeHandle, forwardRef } from "react";
 import * as XLSX from "xlsx";
 import { TimelineItem } from "@/app/page";
 
@@ -8,10 +8,20 @@ interface FileUploadProps {
   onDataLoaded: (data: TimelineItem[]) => void;
 }
 
-export default function FileUpload({ onDataLoaded }: FileUploadProps) {
+export interface FileUploadRef {
+  triggerUpload: () => void;
+}
+
+const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded }, ref) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string>("");
   const [error, setError] = useState<string>("");
+
+  useImperativeHandle(ref, () => ({
+    triggerUpload: () => {
+      fileInputRef.current?.click();
+    },
+  }));
 
   const parseDate = (value: any): Date | null => {
     if (!value) return null;
@@ -169,4 +179,8 @@ export default function FileUpload({ onDataLoaded }: FileUploadProps) {
       </div>
     </div>
   );
-}
+});
+
+FileUpload.displayName = "FileUpload";
+
+export default FileUpload;
