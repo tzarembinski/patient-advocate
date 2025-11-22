@@ -37,6 +37,12 @@ const defaultCategoryColors = [
 ];
 
 
+// Helper function to truncate long activity names
+const truncateName = (name: string, maxLength: number = 40): string => {
+  if (name.length <= maxLength) return name;
+  return name.substring(0, maxLength) + "...";
+};
+
 export default function Timeline({
   data,
   onEditEntry,
@@ -147,7 +153,11 @@ export default function Timeline({
     const startOffset = differenceInDays(item.beginDate, startDate);
     const leftPercent = (startOffset / totalDays) * 100;
 
-    if (item.endDate) {
+    // Check if this is a milestone (no end date OR end date equals begin date)
+    const isMilestoneEvent = !item.endDate ||
+      (item.endDate && differenceInDays(item.endDate, item.beginDate) === 0);
+
+    if (item.endDate && !isMilestoneEvent) {
       // Duration event - show as bar
       const duration = differenceInDays(item.endDate, item.beginDate);
       const widthPercent = Math.max((duration / totalDays) * 100, 0.5);
@@ -342,7 +352,7 @@ export default function Timeline({
                               {position.widthPixels > 30 && (
                                 <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
                                   <div className="text-[10px] md:text-xs font-bold text-gray-800 truncate px-2">
-                                    {position.widthPixels > 80 ? item.name : item.name.substring(0, 1)}
+                                    {position.widthPixels > 80 ? truncateName(item.name) : item.name.substring(0, 1)}
                                   </div>
                                 </div>
                               )}

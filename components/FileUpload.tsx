@@ -16,6 +16,7 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [showExample, setShowExample] = useState<boolean>(false);
 
   useImperativeHandle(ref, () => ({
     triggerUpload: () => {
@@ -42,9 +43,67 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
       return new Date(dateMs);
     }
 
-    // If it's a string, try to parse it
+    // If it's a string, try multiple parsing strategies
     if (typeof value === "string") {
-      const date = new Date(value);
+      const str = value.trim();
+
+      // Try parsing MM/DD/YYYY or MM-DD-YYYY
+      const mdyPattern = /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/;
+      const mdyMatch = str.match(mdyPattern);
+      if (mdyMatch) {
+        let [, month, day, year] = mdyMatch;
+        // Convert 2-digit year to 4-digit (assume 20xx for YY < 100)
+        if (year.length === 2) {
+          year = `20${year}`;
+        }
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      // Try parsing YYYY-MM-DD or YYYY/MM/DD
+      const ymdPattern = /^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/;
+      const ymdMatch = str.match(ymdPattern);
+      if (ymdMatch) {
+        const [, year, month, day] = ymdMatch;
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      // Try parsing YYYYMMDD
+      const compactPattern = /^(\d{4})(\d{2})(\d{2})$/;
+      const compactMatch = str.match(compactPattern);
+      if (compactMatch) {
+        const [, year, month, day] = compactMatch;
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      // Try parsing DD/MM/YYYY or DD-MM-YYYY (European format)
+      // This is ambiguous with MM/DD/YYYY, so we check if day > 12
+      const dmyPattern = /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/;
+      const dmyMatch = str.match(dmyPattern);
+      if (dmyMatch) {
+        let [, first, second, year] = dmyMatch;
+        // If first number > 12, it must be day (European format)
+        if (parseInt(first) > 12) {
+          if (year.length === 2) {
+            year = `20${year}`;
+          }
+          const date = new Date(parseInt(year), parseInt(second) - 1, parseInt(first));
+          if (!isNaN(date.getTime())) {
+            return date;
+          }
+        }
+      }
+
+      // Fallback: try native Date parsing
+      const date = new Date(str);
       if (!isNaN(date.getTime())) {
         return date;
       }
@@ -154,12 +213,25 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
           className="hidden"
         />
 
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-        >
-          Upload Excel or CSV File
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Upload Excel or CSV File
+          </button>
+
+          <button
+            onClick={() => setShowExample(!showExample)}
+            className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center gap-2"
+            title="Show example format"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Example
+          </button>
+        </div>
 
         {fileName && (
           <p className="mt-4 text-sm text-gray-600">
@@ -171,6 +243,55 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
           <p className="mt-4 text-sm text-red-600">
             {error}
           </p>
+        )}
+
+        {showExample && (
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg w-full max-w-2xl">
+            <h3 className="text-sm font-bold text-gray-900 mb-2">Excel File Format Example</h3>
+            <p className="text-xs text-gray-700 mb-3">
+              Your Excel file should have these columns:
+            </p>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-xs border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="border border-gray-300 px-3 py-2 text-left font-semibold">Name</th>
+                    <th className="border border-gray-300 px-3 py-2 text-left font-semibold">Begin date</th>
+                    <th className="border border-gray-300 px-3 py-2 text-left font-semibold">End date</th>
+                    <th className="border border-gray-300 px-3 py-2 text-left font-semibold">Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-gray-300 px-3 py-2">Diagnosis (ultrasound)</td>
+                    <td className="border border-gray-300 px-3 py-2">03/18/2025</td>
+                    <td className="border border-gray-300 px-3 py-2">03/18/2025</td>
+                    <td className="border border-gray-300 px-3 py-2">Milestones</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-3 py-2">Chemotherapy cycle 1</td>
+                    <td className="border border-gray-300 px-3 py-2">04/01/2025</td>
+                    <td className="border border-gray-300 px-3 py-2">04/21/2025</td>
+                    <td className="border border-gray-300 px-3 py-2">Line 1 treatment</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-3 py-2">Blood test</td>
+                    <td className="border border-gray-300 px-3 py-2">05/10/2025</td>
+                    <td className="border border-gray-300 px-3 py-2"></td>
+                    <td className="border border-gray-300 px-3 py-2">Biomarker Assess</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-3 space-y-1">
+              <p className="text-xs text-gray-700">
+                <span className="font-semibold">Note:</span> End date is optional for single-day events (milestones)
+              </p>
+              <p className="text-xs text-gray-700">
+                <span className="font-semibold">Supported date formats:</span> MM/DD/YYYY, MM-DD-YYYY, YYYY-MM-DD, and more
+              </p>
+            </div>
+          </div>
         )}
 
         <p className="mt-4 text-xs text-gray-500 text-center">

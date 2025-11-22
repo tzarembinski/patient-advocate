@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { TimelineItem } from "@/app/page";
+import DateInput from "./DateInput";
 
 interface ManualEntryFormProps {
   onEntryAdded: (entry: TimelineItem) => void;
@@ -78,7 +79,7 @@ export default function ManualEntryForm({
     if (startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
-      if (end <= start) {
+      if (end < start) {
         errors.endDate = "End date must be after start date";
       }
     }
@@ -95,14 +96,14 @@ export default function ManualEntryForm({
     if (startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
-      if (end <= start) {
+      if (end < start) {
         return false;
       }
     }
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form
@@ -143,6 +144,8 @@ export default function ManualEntryForm({
       setEndDate("");
       setCategory(CATEGORIES[0]);
       setValidationErrors({});
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -206,14 +209,22 @@ export default function ManualEntryForm({
             id="activityName"
             value={activityName}
             onChange={(e) => handleActivityNameChange(e.target.value)}
+            maxLength={100}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
               validationErrors.activityName ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="e.g., Initial Diagnosis, Treatment Start"
           />
-          {validationErrors.activityName && (
-            <p className="mt-1 text-sm text-red-600">{validationErrors.activityName}</p>
-          )}
+          <div className="mt-1 flex items-center justify-between">
+            <div>
+              {validationErrors.activityName && (
+                <p className="text-sm text-red-600">{validationErrors.activityName}</p>
+              )}
+            </div>
+            <p className={`text-xs ${activityName.length > 40 ? 'text-orange-600 font-semibold' : 'text-gray-500'}`}>
+              {activityName.length}/100 {activityName.length > 40 && '(Names over 40 chars will be truncated on timeline)'}
+            </p>
+          </div>
         </div>
 
         {/* Start Date */}
@@ -224,14 +235,11 @@ export default function ManualEntryForm({
           >
             Start Date <span className="text-red-500">*</span>
           </label>
-          <input
-            type="date"
+          <DateInput
             id="startDate"
             value={startDate}
-            onChange={(e) => handleStartDateChange(e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              validationErrors.startDate ? 'border-red-500' : 'border-gray-300'
-            }`}
+            onChange={handleStartDateChange}
+            hasError={!!validationErrors.startDate}
           />
           {validationErrors.startDate && (
             <p className="mt-1 text-sm text-red-600">{validationErrors.startDate}</p>
@@ -246,14 +254,11 @@ export default function ManualEntryForm({
           >
             End Date <span className="text-gray-500 text-xs">(optional - leave empty for milestones)</span>
           </label>
-          <input
-            type="date"
+          <DateInput
             id="endDate"
             value={endDate}
-            onChange={(e) => handleEndDateChange(e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              validationErrors.endDate ? 'border-red-500' : 'border-gray-300'
-            }`}
+            onChange={handleEndDateChange}
+            hasError={!!validationErrors.endDate}
           />
           {validationErrors.endDate && (
             <p className="mt-1 text-sm text-red-600">{validationErrors.endDate}</p>
