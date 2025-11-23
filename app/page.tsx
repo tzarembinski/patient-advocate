@@ -9,14 +9,22 @@ import Toast, { ToastType } from "@/components/Toast";
 import EmptyState from "@/components/EmptyState";
 import OnboardingTips from "@/components/OnboardingTips";
 import SavedIndicator from "@/components/SavedIndicator";
+import PatientContextForm, { PatientContext } from "@/components/PatientContextForm";
+import PromptModal from "@/components/PromptModal";
+import HowToUse from "@/components/HowToUse";
+import PatientInfoSummary from "@/components/PatientInfoSummary";
 import {
   saveTimelineEntries,
   loadTimelineEntries,
   getLastSavedTime,
   isOnboardingDismissed,
   dismissOnboarding,
+  savePatientContext,
+  loadPatientContext,
 } from "@/lib/localStorage";
 import { generateSampleData } from "@/lib/sampleData";
+import { generateDoctorQuestionsPrompt } from "@/lib/promptGenerator";
+import { generateTimelinePDF } from "@/lib/pdfGenerator";
 
 export interface TimelineItem {
   id: string;
@@ -40,8 +48,13 @@ export default function Home() {
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [patientContext, setPatientContext] = useState<PatientContext | null>(null);
+  const [showPatientForm, setShowPatientForm] = useState(false);
+  const [showPromptModal, setShowPromptModal] = useState(false);
+  const [generatedPrompt, setGeneratedPrompt] = useState("");
   const fileUploadRef = useRef<FileUploadRef>(null);
   const manualEntryFormRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -49,6 +62,10 @@ export default function Home() {
     if (savedData.length > 0) {
       setTimelineData(savedData);
       setLastSaved(getLastSavedTime());
+    }
+    const savedContext = loadPatientContext();
+    if (savedContext) {
+      setPatientContext(savedContext);
     }
     setIsLoaded(true);
   }, []);
@@ -102,6 +119,15 @@ export default function Home() {
       }
       setTimelineData((prevData) => [...prevData, entry]);
       showToast("Entry added successfully", "success");
+
+      // Prompt to update patient info after adding timeline entry
+      if (patientContext) {
+        setTimeout(() => {
+          if (window.confirm("Timeline entry added! Would you also like to update your patient information?")) {
+            setShowPatientForm(true);
+          }
+        }, 500);
+      }
     } catch (error) {
       showToast("Failed to add entry. Please try again.", "error");
     }
@@ -244,8 +270,51 @@ export default function Home() {
     return `${month}/${day}/${year}`;
   };
 
+  const handleExportToPDF = async () => {
+    if (timelineData.length === 0) {
+      showToast("No data to export", "warning");
+      return;
+    }
+
+    try {
+      await generateTimelinePDF(timelineRef.current, timelineData, patientContext);
+      showToast(`Timeline exported to PDF successfully`, "success");
+    } catch (error) {
+      showToast("Failed to export PDF. Please try again.", "error");
+      console.error("PDF export error:", error);
+    }
+  };
+
+  const handleSavePatientContext = (context: PatientContext) => {
+    setPatientContext(context);
+    savePatientContext(context);
+    setShowPatientForm(false);
+    showToast("Patient information saved successfully", "success");
+  };
+
+  const handleGenerateQuestions = () => {
+    if (!patientContext) {
+      setShowPatientForm(true);
+      showToast("Please enter your patient information first", "info");
+      return;
+    }
+
+    if (timelineData.length === 0) {
+      showToast("Please add timeline entries before generating questions", "warning");
+      return;
+    }
+
+    const prompt = generateDoctorQuestionsPrompt(patientContext, timelineData);
+    setGeneratedPrompt(prompt);
+    setShowPromptModal(true);
+  };
+
+  const handleEditPatientInfo = () => {
+    setShowPatientForm(true);
+  };
+
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen p-4 sm:p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
           <h1 className="text-4xl font-bold text-gray-900">
@@ -253,9 +322,20 @@ export default function Home() {
           </h1>
           <SavedIndicator lastSaved={lastSaved} />
         </div>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 mb-6">
           Upload an Excel or CSV file with Name, Begin date, End date (optional), and Category columns to generate a medical timeline
         </p>
+
+        <div className="mb-8">
+          <HowToUse />
+        </div>
+
+        {patientContext && timelineData.length > 0 && (
+          <PatientInfoSummary
+            patientContext={patientContext}
+            onEdit={handleEditPatientInfo}
+          />
+        )}
 
         {timelineData.length === 0 ? (
           <EmptyState
@@ -268,7 +348,47 @@ export default function Home() {
             <div className="flex-1">
               <FileUpload ref={fileUploadRef} onDataLoaded={handleDataLoaded} />
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleEditPatientInfo}
+                className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors shadow-md flex items-center gap-2 h-fit"
+                title={patientContext ? "Edit your patient information" : "Add your patient information"}
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                {patientContext ? "Edit My Info" : "Add My Info"}
+              </button>
+              <button
+                onClick={handleGenerateQuestions}
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-md flex items-center gap-2 h-fit"
+                title="Generate questions for your doctor based on your timeline"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Questions for Doctor
+              </button>
               <button
                 onClick={handleExportToExcel}
                 className="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors shadow-md flex items-center gap-2 h-fit"
@@ -289,7 +409,37 @@ export default function Home() {
                 </svg>
                 Export to Excel
               </button>
+              <button
+                onClick={handleExportToPDF}
+                className="px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors shadow-md flex items-center gap-2 h-fit"
+                title="Download timeline as PDF for printing"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                  />
+                </svg>
+                Download PDF
+              </button>
             </div>
+          </div>
+        )}
+
+        {showPatientForm && (
+          <div className="mt-8">
+            <PatientContextForm
+              onSave={handleSavePatientContext}
+              onCancel={() => setShowPatientForm(false)}
+              initialData={patientContext || undefined}
+            />
           </div>
         )}
 
@@ -306,7 +456,7 @@ export default function Home() {
         {showOnboarding && <OnboardingTips onDismiss={handleDismissOnboarding} />}
 
         {timelineData.length > 0 && (
-          <div className="mt-8">
+          <div className="mt-8" ref={timelineRef}>
             <Timeline
               data={timelineData}
               onEditEntry={handleEditEntry}
@@ -330,6 +480,13 @@ export default function Home() {
           message={toast.message}
           type={toast.type}
           onClose={hideToast}
+        />
+      )}
+
+      {showPromptModal && (
+        <PromptModal
+          prompt={generatedPrompt}
+          onClose={() => setShowPromptModal(false)}
         />
       )}
     </main>

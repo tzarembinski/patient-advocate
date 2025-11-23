@@ -1,9 +1,11 @@
 import { TimelineItem } from "@/app/page";
+import { PatientContext } from "@/components/PatientContextForm";
 
 const STORAGE_KEYS = {
   TIMELINE_ENTRIES: "timeline_entries",
   ONBOARDING_DISMISSED: "timeline_onboarding_dismissed",
   LAST_SAVED: "timeline_last_saved",
+  PATIENT_CONTEXT: "patient_context",
 } as const;
 
 /**
@@ -116,5 +118,49 @@ export const clearTimelineData = (): void => {
     localStorage.removeItem(STORAGE_KEYS.LAST_SAVED);
   } catch (error) {
     console.error("Failed to clear timeline data:", error);
+  }
+};
+
+/**
+ * Save patient context to localStorage
+ */
+export const savePatientContext = (context: PatientContext): void => {
+  if (!isLocalStorageAvailable()) return;
+
+  try {
+    const serializedData = JSON.stringify(context);
+    localStorage.setItem(STORAGE_KEYS.PATIENT_CONTEXT, serializedData);
+  } catch (error) {
+    console.error("Failed to save patient context:", error);
+  }
+};
+
+/**
+ * Load patient context from localStorage
+ */
+export const loadPatientContext = (): PatientContext | null => {
+  if (!isLocalStorageAvailable()) return null;
+
+  try {
+    const serializedData = localStorage.getItem(STORAGE_KEYS.PATIENT_CONTEXT);
+    if (!serializedData) return null;
+
+    return JSON.parse(serializedData);
+  } catch (error) {
+    console.error("Failed to load patient context:", error);
+    return null;
+  }
+};
+
+/**
+ * Clear patient context from localStorage
+ */
+export const clearPatientContext = (): void => {
+  if (!isLocalStorageAvailable()) return;
+
+  try {
+    localStorage.removeItem(STORAGE_KEYS.PATIENT_CONTEXT);
+  } catch (error) {
+    console.error("Failed to clear patient context:", error);
   }
 };
