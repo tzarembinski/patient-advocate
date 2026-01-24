@@ -8,6 +8,7 @@ interface TimelineProps {
   data: TimelineItem[];
   onEditEntry: (entry: TimelineItem) => void;
   onDeleteEntry: (id: string, name: string) => void;
+  onAddNote: (id: string, note: string) => void;
   hiddenCategories: Set<string>;
   onToggleCategoryVisibility: (category: string) => void;
 }
@@ -26,6 +27,7 @@ const categoryColors: Record<string, { bg: string; border: string; text: string;
   "Line 4 treatment": { bg: "bg-cyan-100", border: "border-cyan-400", text: "text-cyan-900", rgb: "34, 211, 238" },
   "Line 4": { bg: "bg-cyan-100", border: "border-cyan-400", text: "text-cyan-900", rgb: "34, 211, 238" }, // Legacy support
   "Complications": { bg: "bg-red-100", border: "border-red-400", text: "text-red-900", rgb: "248, 113, 113" },
+  "Other": { bg: "bg-gray-100", border: "border-gray-400", text: "text-gray-900", rgb: "156, 163, 175" },
 };
 
 // Default colors for categories not in the predefined list
@@ -43,14 +45,22 @@ const truncateName = (name: string, maxLength: number = 40): string => {
   return name.substring(0, maxLength) + "...";
 };
 
+// Helper function to count words
+const countWords = (text: string): number => {
+  return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+};
+
 export default function Timeline({
   data,
   onEditEntry,
   onDeleteEntry,
+  onAddNote,
   hiddenCategories,
   onToggleCategoryVisibility,
 }: TimelineProps) {
   const [containerWidth, setContainerWidth] = useState(800);
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
+  const [noteText, setNoteText] = useState("");
 
   useEffect(() => {
     const updateWidth = () => {
@@ -63,6 +73,25 @@ export default function Timeline({
     window.addEventListener('resize', updateWidth);
     return () => window.removeEventListener('resize', updateWidth);
   }, [data]);
+
+  const handleStartEditNote = (item: TimelineItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingNoteId(item.id);
+    setNoteText(item.note || "");
+  };
+
+  const handleSaveNote = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddNote(id, noteText);
+    setEditingNoteId(null);
+    setNoteText("");
+  };
+
+  const handleCancelNote = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingNoteId(null);
+    setNoteText("");
+  };
 
   const timelineConfig = useMemo(() => {
     if (data.length === 0) return null;
@@ -198,7 +227,102 @@ export default function Timeline({
     return defaultCategoryColors[index % defaultCategoryColors.length];
   };
 
+  const renderTooltipContent = (item: TimelineItem, position: ReturnType<typeof getItemPosition>, category: string) => {
+    const isEditingThisNote = editingNoteId === item.id;
+    const wordCount = countWords(noteText);
+    const isOverLimit = wordCount > 30;
 
+    return (
+      <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]">
+        <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl text-sm pointer-events-auto min-w-[200px] max-w-[280px]">
+          <div className="font-bold mb-1">{item.name}</div>
+          <div className="text-gray-300 text-xs">
+            {position.duration === 0 || position.isMilestone
+              ? format(item.beginDate, "MMM dd, yyyy")
+              : `${format(item.beginDate, "MMM dd, yyyy")} - ${item.endDate && format(item.endDate, "MMM dd, yyyy")}`
+            }
+          </div>
+          {position.duration > 0 && !position.isMilestone && (
+            <div className="text-gray-400 text-xs mt-1">
+              Duration: {position.duration} days
+            </div>
+          )}
+          <div className="text-gray-400 text-xs">
+            {category}
+          </div>
+
+          {/* Note display/edit section */}
+          {isEditingThisNote ? (
+            <div className="mt-2 pt-2 border-t border-gray-700">
+              <textarea
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                className={`w-full px-2 py-1 text-xs bg-gray-800 border rounded text-white placeholder-gray-500 resize-none ${isOverLimit ? 'border-red-500' : 'border-gray-600'}`}
+                placeholder="Add a note (max 30 words)..."
+                rows={2}
+                autoFocus
+              />
+              <div className="flex items-center justify-between mt-1">
+                <span className={`text-xs ${isOverLimit ? 'text-red-400' : 'text-gray-500'}`}>
+                  {wordCount}/30 words
+                </span>
+                <div className="flex gap-1">
+                  <button
+                    onClick={(e) => handleCancelNote(e)}
+                    className="px-2 py-0.5 bg-gray-700 hover:bg-gray-600 rounded text-xs"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={(e) => handleSaveNote(item.id, e)}
+                    disabled={isOverLimit}
+                    className={`px-2 py-0.5 rounded text-xs ${isOverLimit ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-500'}`}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {item.note && (
+                <div className="mt-2 pt-2 border-t border-gray-700">
+                  <div className="text-xs text-gray-300 italic">&quot;{item.note}&quot;</div>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Action buttons */}
+          <div className="flex gap-2 mt-2 pt-2 border-t border-gray-700">
+            <button
+              onClick={() => onEditEntry(item)}
+              className="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs font-medium transition-colors"
+            >
+              Edit
+            </button>
+            <button
+              onClick={(e) => handleStartEditNote(item, e)}
+              className="flex-1 px-2 py-1 bg-amber-600 hover:bg-amber-700 rounded text-xs font-medium transition-colors"
+            >
+              {item.note ? 'Edit Note' : 'Add Note'}
+            </button>
+            <button
+              onClick={() => onDeleteEntry(item.id, item.name)}
+              className="flex-1 px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs font-medium transition-colors"
+            >
+              Delete
+            </button>
+          </div>
+          {/* Tooltip arrow */}
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 -mt-px">
+            <div className="border-4 border-transparent border-b-gray-900"></div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
@@ -233,7 +357,7 @@ export default function Timeline({
           </div>
 
           <div className="text-xs md:text-sm text-gray-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200">
-            💡 Hover over any milestone or activity to see details
+            Tap/hover on any item for options
           </div>
         </div>
       </div>
@@ -259,7 +383,7 @@ export default function Timeline({
           </div>
 
           {/* Swim lanes for each category - VERSION 3: Compact with on-bar labels */}
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 pb-32">
             {sortedCategories.filter(cat => !hiddenCategories.has(cat)).map((category, catIndex) => {
               const items = categorizedData[category];
               const colors = getCategoryColor(category, sortedCategories.indexOf(category));
@@ -300,39 +424,10 @@ export default function Timeline({
                             style={{ left: position.left }}
                           >
                             {/* Diamond shape with hover effect */}
-                            <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl`}></div>
+                            <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}></div>
 
-                            {/* Hover tooltip - smart positioning: below for first category, above for others */}
-                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50`}>
-                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm pointer-events-auto">
-                                <div className="font-bold mb-1">{item.name}</div>
-                                <div className="text-gray-300 text-xs">
-                                  {format(item.beginDate, "MMM dd, yyyy")}
-                                </div>
-                                <div className="text-gray-400 text-xs mt-1">
-                                  {category}
-                                </div>
-                                {/* Edit and Delete buttons */}
-                                <div className="flex gap-2 mt-2 pt-2 border-t border-gray-700">
-                                  <button
-                                    onClick={() => onEditEntry(item)}
-                                    className="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs font-medium transition-colors"
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    onClick={() => onDeleteEntry(item.id, item.name)}
-                                    className="flex-1 px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs font-medium transition-colors"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                                {/* Tooltip arrow */}
-                                <div className={`absolute ${isFirstCategory ? 'bottom-full' : 'top-full'} left-1/2 -translate-x-1/2 -mt-px`}>
-                                  <div className={`border-4 border-transparent ${isFirstCategory ? 'border-b-gray-900' : 'border-t-gray-900'}`}></div>
-                                </div>
-                              </div>
-                            </div>
+                            {/* Hover tooltip */}
+                            {renderTooltipContent(item, position, category)}
                           </div>
                         );
                       } else {
@@ -345,7 +440,7 @@ export default function Timeline({
                           >
                             {/* Bar with subtle hover effect */}
                             <div
-                              className={`relative h-7 md:h-8 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105`}
+                              className={`relative h-7 md:h-8 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105 ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}
                               style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
                             >
                               {/* Optional: Show first letter or short indicator on bar for very small bars */}
@@ -358,45 +453,8 @@ export default function Timeline({
                               )}
                             </div>
 
-                            {/* Hover tooltip - smart positioning: below for first category, above for others */}
-                            <div className={`absolute ${isFirstCategory ? 'top-full mt-3' : 'bottom-full mb-3'} left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50`}>
-                              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm pointer-events-auto">
-                                <div className="font-bold mb-1">{item.name}</div>
-                                <div className="text-gray-300 text-xs">
-                                  {position.duration === 0
-                                    ? format(item.beginDate, "MMM dd, yyyy")
-                                    : `${format(item.beginDate, "MMM dd, yyyy")} - ${item.endDate && format(item.endDate, "MMM dd, yyyy")}`
-                                  }
-                                </div>
-                                {position.duration > 0 && (
-                                  <div className="text-gray-400 text-xs mt-1">
-                                    Duration: {position.duration} days
-                                  </div>
-                                )}
-                                <div className="text-gray-400 text-xs">
-                                  {category}
-                                </div>
-                                {/* Edit and Delete buttons */}
-                                <div className="flex gap-2 mt-2 pt-2 border-t border-gray-700">
-                                  <button
-                                    onClick={() => onEditEntry(item)}
-                                    className="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs font-medium transition-colors"
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    onClick={() => onDeleteEntry(item.id, item.name)}
-                                    className="flex-1 px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs font-medium transition-colors"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                                {/* Tooltip arrow */}
-                                <div className={`absolute ${isFirstCategory ? 'bottom-full' : 'top-full'} left-1/2 -translate-x-1/2 -mt-px`}>
-                                  <div className={`border-4 border-transparent ${isFirstCategory ? 'border-b-gray-900' : 'border-t-gray-900'}`}></div>
-                                </div>
-                              </div>
-                            </div>
+                            {/* Hover tooltip */}
+                            {renderTooltipContent(item, position, category)}
                           </div>
                         );
                       }
@@ -418,6 +476,10 @@ export default function Timeline({
                 <div className="flex items-center gap-1.5">
                   <div className="w-6 h-4 border-2 border-gray-400 bg-gray-200 rounded"></div>
                   <span>Duration</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 border-2 border-gray-400 bg-white rotate-45 ring-2 ring-amber-400 ring-offset-1"></div>
+                  <span>Has Note</span>
                 </div>
               </div>
               <div className="text-[10px] md:text-xs">

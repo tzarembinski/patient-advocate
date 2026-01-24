@@ -26,6 +26,7 @@ const CATEGORIES = [
   "Line 3 treatment",
   "Line 4 treatment",
   "Complications",
+  "Other",
 ];
 
 // Helper function to format date for input field (YYYY-MM-DD)
@@ -50,6 +51,9 @@ export default function ManualEntryForm({
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Check if the selected category is "Milestones" (single date only)
+  const isMilestone = category === "Milestones";
+
   // Pre-fill form when editing
   useEffect(() => {
     if (editingEntry) {
@@ -60,6 +64,13 @@ export default function ManualEntryForm({
       setValidationErrors({});
     }
   }, [editingEntry]);
+
+  // Clear end date when switching to Milestones category
+  useEffect(() => {
+    if (isMilestone) {
+      setEndDate("");
+    }
+  }, [isMilestone]);
 
   // Validate form fields
   const validateForm = (): boolean => {
@@ -72,11 +83,11 @@ export default function ManualEntryForm({
 
     // Start date validation
     if (!startDate) {
-      errors.startDate = "Start date is required";
+      errors.startDate = isMilestone ? "Date is required" : "Start date is required";
     }
 
-    // End date validation (must be after start date if provided)
-    if (startDate && endDate) {
+    // End date validation (must be after start date if provided and not a milestone)
+    if (!isMilestone && startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
       if (end < start) {
@@ -93,7 +104,7 @@ export default function ManualEntryForm({
     if (!activityName.trim() || !startDate) {
       return false;
     }
-    if (startDate && endDate) {
+    if (!isMilestone && startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
       if (end < start) {
@@ -120,8 +131,9 @@ export default function ManualEntryForm({
           id: editingEntry.id,
           name: activityName.trim(),
           beginDate: new Date(startDate),
-          endDate: endDate ? new Date(endDate) : null,
+          endDate: isMilestone ? null : (endDate ? new Date(endDate) : null),
           category: category,
+          note: editingEntry.note, // Preserve existing note
         };
 
         onEntryUpdated(updatedEntry);
@@ -131,7 +143,7 @@ export default function ManualEntryForm({
           id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           name: activityName.trim(),
           beginDate: new Date(startDate),
-          endDate: endDate ? new Date(endDate) : null,
+          endDate: isMilestone ? null : (endDate ? new Date(endDate) : null),
           category: category,
         };
 
@@ -183,9 +195,9 @@ export default function ManualEntryForm({
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-md p-6 border-2 ${editingEntry ? 'border-blue-500' : 'border-gray-200'}`}>
+    <div className={`bg-white rounded-lg shadow-md p-4 sm:p-6 border-2 ${editingEntry ? 'border-blue-500' : 'border-gray-200'}`}>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
           {editingEntry ? "Edit Timeline Entry" : "Add Timeline Entry"}
         </h2>
         {editingEntry && (
@@ -227,45 +239,7 @@ export default function ManualEntryForm({
           </div>
         </div>
 
-        {/* Start Date */}
-        <div>
-          <label
-            htmlFor="startDate"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Start Date <span className="text-red-500">*</span>
-          </label>
-          <DateInput
-            id="startDate"
-            value={startDate}
-            onChange={handleStartDateChange}
-            hasError={!!validationErrors.startDate}
-          />
-          {validationErrors.startDate && (
-            <p className="mt-1 text-sm text-red-600">{validationErrors.startDate}</p>
-          )}
-        </div>
-
-        {/* End Date */}
-        <div>
-          <label
-            htmlFor="endDate"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            End Date <span className="text-gray-500 text-xs">(optional - leave empty for milestones)</span>
-          </label>
-          <DateInput
-            id="endDate"
-            value={endDate}
-            onChange={handleEndDateChange}
-            hasError={!!validationErrors.endDate}
-          />
-          {validationErrors.endDate && (
-            <p className="mt-1 text-sm text-red-600">{validationErrors.endDate}</p>
-          )}
-        </div>
-
-        {/* Category */}
+        {/* Category - Now directly below Activity Name */}
         <div>
           <label
             htmlFor="category"
@@ -285,7 +259,73 @@ export default function ManualEntryForm({
               </option>
             ))}
           </select>
+          {isMilestone && (
+            <p className="mt-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
+              Milestones are single-date events shown as diamonds on the timeline
+            </p>
+          )}
         </div>
+
+        {/* Date Fields - Conditional based on category */}
+        {isMilestone ? (
+          /* Single Date for Milestones */
+          <div>
+            <label
+              htmlFor="startDate"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Date <span className="text-red-500">*</span>
+            </label>
+            <DateInput
+              id="startDate"
+              value={startDate}
+              onChange={handleStartDateChange}
+              hasError={!!validationErrors.startDate}
+            />
+            {validationErrors.startDate && (
+              <p className="mt-1 text-sm text-red-600">{validationErrors.startDate}</p>
+            )}
+          </div>
+        ) : (
+          /* Start Date and End Date for non-Milestones */
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="startDate"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Start Date <span className="text-red-500">*</span>
+              </label>
+              <DateInput
+                id="startDate"
+                value={startDate}
+                onChange={handleStartDateChange}
+                hasError={!!validationErrors.startDate}
+              />
+              {validationErrors.startDate && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.startDate}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="endDate"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                End Date <span className="text-gray-500 text-xs">(optional)</span>
+              </label>
+              <DateInput
+                id="endDate"
+                value={endDate}
+                onChange={handleEndDateChange}
+                hasError={!!validationErrors.endDate}
+              />
+              {validationErrors.endDate && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.endDate}</p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Submit Button */}
         <div className="flex gap-3">
@@ -318,7 +358,7 @@ export default function ManualEntryForm({
       </form>
 
       <p className="mt-4 text-xs text-gray-500">
-        * Required fields. Entries without an end date will appear as milestone diamonds on the timeline.
+        * Required fields. {!isMilestone && "Entries without an end date will appear as bars starting from the start date."}
       </p>
     </div>
   );
