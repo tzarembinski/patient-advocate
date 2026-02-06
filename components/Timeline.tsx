@@ -365,7 +365,7 @@ export default function Timeline({
       <div className="overflow-x-auto">
         <div id="timeline-container" className="min-w-[600px] md:min-w-[800px]">
           {/* Month headers */}
-          <div className="relative h-8 md:h-12 border-b-2 border-gray-400 mb-2 md:mb-4 ml-32 md:ml-48">
+          <div className="relative h-10 md:h-14 border-b-2 border-gray-400 mb-2 md:mb-4 ml-32 md:ml-48">
             {months.map((month, index) => {
               const position = getMonthPosition(month);
               // Calculate label interval based on number of months to prevent overlap
@@ -381,9 +381,10 @@ export default function Timeline({
                   style={{ left: `${position}%` }}
                 >
                   {showLabel && (
-                    <span className="text-xs md:text-sm font-semibold text-gray-700 ml-1 md:ml-2 whitespace-nowrap">
-                      {format(month, "MMM yy")}
-                    </span>
+                    <div className="ml-1 md:ml-2 flex flex-col leading-tight">
+                      <span className="text-xs md:text-sm font-semibold text-gray-700">{format(month, "MMM")}</span>
+                      <span className="text-[10px] md:text-xs text-gray-500">{format(month, "yy")}</span>
+                    </div>
                   )}
                 </div>
               );
