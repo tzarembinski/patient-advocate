@@ -45,6 +45,13 @@ const truncateName = (name: string, maxLength: number = 40): string => {
   return name.substring(0, maxLength) + "...";
 };
 
+// Helper function to get first word of a name
+const getFirstWord = (name: string): string => {
+  const firstWord = name.split(/\s+/)[0] || name;
+  // Truncate if too long
+  return firstWord.length > 10 ? firstWord.substring(0, 8) + ".." : firstWord;
+};
+
 // Helper function to count words
 const countWords = (text: string): number => {
   return text.trim().split(/\s+/).filter(word => word.length > 0).length;
@@ -421,53 +428,107 @@ export default function Timeline({
                     })}
 
                     {/* Items in this category */}
-                    {items.map((item, itemIndex) => {
-                      const position = getItemPosition(item);
-                      const isFirstCategory = catIndex === 0; // Check if this is the first swimlane
+                    {(() => {
+                      // Sort items by position for proper label alternation
+                      const itemsWithPositions = items.map(item => ({
+                        item,
+                        position: getItemPosition(item)
+                      })).sort((a, b) => a.position.leftPercent - b.position.leftPercent);
 
-                      if (position.isMilestone) {
-                        return (
-                          <div
-                            key={itemIndex}
-                            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group cursor-pointer z-10"
-                            style={{ left: position.left }}
-                          >
-                            {/* Diamond shape with hover effect */}
-                            <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}></div>
+                      // Threshold for "short" bars that need external labels (2% of timeline width)
+                      const shortBarThreshold = 50; // pixels
 
-                            {/* Hover tooltip */}
-                            {renderTooltipContent(item, position, category)}
-                          </div>
-                        );
-                      } else {
-                        // Duration bar with hover effect
-                        return (
-                          <div
-                            key={itemIndex}
-                            className="absolute top-1/2 -translate-y-1/2 group cursor-pointer z-10"
-                            style={{ left: position.left, width: position.width }}
-                          >
-                            {/* Bar with subtle hover effect */}
+                      // Track label index for alternation (only for items that get labels)
+                      let labelIndex = 0;
+
+                      return itemsWithPositions.map(({ item, position }, itemIndex) => {
+                        // Determine if this item needs an external label
+                        const needsLabel = position.isMilestone || position.widthPixels <= shortBarThreshold;
+                        const labelBelow = needsLabel ? (labelIndex % 2 === 0) : false;
+                        if (needsLabel) labelIndex++;
+
+                        if (position.isMilestone) {
+                          return (
                             <div
-                              className={`relative h-7 md:h-8 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105 ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}
-                              style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
+                              key={item.id || itemIndex}
+                              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group cursor-pointer z-10"
+                              style={{ left: position.left }}
                             >
-                              {/* Optional: Show first letter or short indicator on bar for very small bars */}
-                              {position.widthPixels > 30 && (
-                                <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
-                                  <div className="text-[10px] md:text-xs font-bold text-gray-800 truncate px-2">
-                                    {position.widthPixels > 80 ? truncateName(item.name) : item.name.substring(0, 1)}
-                                  </div>
+                              {/* Label above diamond */}
+                              {!labelBelow && (
+                                <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                    {getFirstWord(item.name)}
+                                  </span>
                                 </div>
                               )}
-                            </div>
 
-                            {/* Hover tooltip */}
-                            {renderTooltipContent(item, position, category)}
-                          </div>
-                        );
-                      }
-                    })}
+                              {/* Diamond shape with hover effect */}
+                              <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}></div>
+
+                              {/* Label below diamond */}
+                              {labelBelow && (
+                                <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                    {getFirstWord(item.name)}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Hover tooltip */}
+                              {renderTooltipContent(item, position, category)}
+                            </div>
+                          );
+                        } else {
+                          // Duration bar with hover effect
+                          const isShortBar = position.widthPixels <= shortBarThreshold;
+
+                          return (
+                            <div
+                              key={item.id || itemIndex}
+                              className="absolute top-1/2 -translate-y-1/2 group cursor-pointer z-10"
+                              style={{ left: position.left, width: position.width }}
+                            >
+                              {/* Label above short bar */}
+                              {isShortBar && !labelBelow && (
+                                <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                    {getFirstWord(item.name)}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Bar with subtle hover effect */}
+                              <div
+                                className={`relative h-7 md:h-8 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105 ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}
+                                style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
+                              >
+                                {/* Show text on bar for larger bars */}
+                                {!isShortBar && (
+                                  <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
+                                    <div className="text-[10px] md:text-xs font-bold text-gray-800 truncate px-2">
+                                      {position.widthPixels > 80 ? truncateName(item.name) : item.name.substring(0, 1)}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Label below short bar */}
+                              {isShortBar && labelBelow && (
+                                <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                    {getFirstWord(item.name)}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Hover tooltip */}
+                              {renderTooltipContent(item, position, category)}
+                            </div>
+                          );
+                        }
+                      });
+                    })()}
                   </div>
                 </div>
               );
