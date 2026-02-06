@@ -368,15 +368,23 @@ export default function Timeline({
           <div className="relative h-8 md:h-12 border-b-2 border-gray-400 mb-2 md:mb-4 ml-32 md:ml-48">
             {months.map((month, index) => {
               const position = getMonthPosition(month);
+              // Calculate label interval based on number of months to prevent overlap
+              // Show every month for <6 months, every 2nd for 6-11, every 3rd for 12-17, every 4th for 18+
+              const totalMonths = months.length;
+              const labelInterval = totalMonths <= 6 ? 1 : totalMonths <= 12 ? 2 : totalMonths <= 18 ? 3 : 4;
+              const showLabel = index % labelInterval === 0;
+
               return (
                 <div
                   key={index}
                   className="absolute top-0 h-full border-l border-gray-300"
                   style={{ left: `${position}%` }}
                 >
-                  <span className="text-xs md:text-sm font-semibold text-gray-700 ml-1 md:ml-2">
-                    {format(month, "MMM yy")}
-                  </span>
+                  {showLabel && (
+                    <span className="text-xs md:text-sm font-semibold text-gray-700 ml-1 md:ml-2 whitespace-nowrap">
+                      {format(month, "MMM yy")}
+                    </span>
+                  )}
                 </div>
               );
             })}
