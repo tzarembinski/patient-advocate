@@ -449,8 +449,8 @@ export default function Timeline({
                     }
 
                     const maxRows = Math.max(...itemRows, 0) + 1;
-                    const rowHeight = 28; // Height per row (bar height)
-                    const baseLaneHeight = 36; // Minimum lane height
+                    const rowHeight = 24; // Height per row (matches bar height h-6) - no gap between rows
+                    const baseLaneHeight = 32; // Minimum lane height
                     const laneHeight = Math.max(baseLaneHeight, maxRows * rowHeight + 8);
 
                     return (
@@ -486,7 +486,7 @@ export default function Timeline({
 
                             // Waterfall: position from top, each row drops down
                             const row = itemRows[itemIndex];
-                            const topOffset = 4 + (row * rowHeight); // 4px padding from top
+                            const topOffset = 4 + (row * rowHeight); // Rows touch - no gap
 
                             if (position.isMilestone) {
                               return (
@@ -505,7 +505,7 @@ export default function Timeline({
                                   )}
 
                                   {/* Diamond shape with hover effect */}
-                                  <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}></div>
+                                  <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl`}></div>
 
                                   {/* Label below diamond or for stacked items */}
                                   {(labelBelow || row > 0) && (
@@ -541,7 +541,7 @@ export default function Timeline({
 
                                   {/* Bar with subtle hover effect */}
                                   <div
-                                    className={`relative h-6 md:h-7 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105 ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}
+                                    className={`relative h-6 md:h-7 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105`}
                                     style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
                                   >
                                     {/* Show text on bar for larger bars */}
@@ -589,10 +589,6 @@ export default function Timeline({
                 <div className="flex items-center gap-1.5">
                   <div className="w-6 h-4 border-2 border-gray-400 bg-gray-200 rounded"></div>
                   <span>Duration</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 border-2 border-gray-400 bg-white rotate-45 ring-2 ring-amber-400 ring-offset-1"></div>
-                  <span>Has Note</span>
                 </div>
               </div>
               <div className="text-[10px] md:text-xs">
