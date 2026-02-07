@@ -1,0 +1,17 @@
+Name,Category,Begin Date,End Date,Note
+Abdominal Pain and Fatigue,Milestones,2023-02-01,,Nonspecific symptoms 2 months
+CT Abdomen,Biomarker Assess,2023-02-10,,5cm liver mass discovered
+MRI Liver with Contrast,Biomarker Assess,2023-02-17,,Intrahepatic cholangiocarcinoma suspected
+Liver Biopsy,Biomarker Assess,2023-02-22,,Intrahepatic CCA confirmed
+CA 19-9 Baseline,Biomarker Assess,2023-02-25,,Elevated at 450 U/mL
+Molecular Profiling Sent,Biomarker Assess,2023-02-28,,Foundation One ordered
+Staging Laparoscopy,Biomarker Assess,2023-03-08,,No peritoneal disease
+Molecular Results,Biomarker Assess,2023-03-15,,FGFR2 fusion detected IDH1 wild-type
+Multidisciplinary Tumor Board,Milestones,2023-03-20,,Deemed resectable
+Left Hepatectomy,Milestones,2023-04-05,,R0 resection margins negative
+Pathology Final,Biomarker Assess,2023-04-12,,T2N0 no nodes involved
+Adjuvant Capecitabine,Line 1 treatment,2023-05-10,2023-11-10,6 months per BILCAP trial
+CA 19-9 Normalized,Biomarker Assess,2023-06-15,,Down to 28 U/mL
+3-Month Surveillance CT,Milestones,2023-08-10,,No evidence of recurrence
+6-Month Surveillance,Milestones,2023-11-10,,NED continues
+12-Month Surveillance,Milestones,2024-04-05,,Remains disease-free

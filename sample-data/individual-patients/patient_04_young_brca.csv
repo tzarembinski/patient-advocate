@@ -1,0 +1,19 @@
+Name,Category,Begin Date,End Date,Note
+Breast Lump Age 32,Milestones,2022-06-01,,Self-detected growing mass
+Ultrasound and Mammogram,Biomarker Assess,2022-06-08,,3.2cm irregular mass
+Core Needle Biopsy,Biomarker Assess,2022-06-12,,High grade IDC
+Receptor Testing,Biomarker Assess,2022-06-15,,ER 0% PR 0% HER2 negative Ki-67 90%
+Genetic Counseling,Milestones,2022-06-20,,Family history reviewed
+BRCA1/2 and Panel Testing,Biomarker Assess,2022-06-25,,BRCA1 positive
+Fertility Consultation,Milestones,2022-06-28,,Egg freezing discussed
+Egg Retrieval,Milestones,2022-07-10,,Fertility preservation completed
+Staging Scans,Biomarker Assess,2022-07-15,,Stage IIB no mets
+PD-L1 Testing,Biomarker Assess,2022-07-18,,CPS 12 positive
+AC-T with Keytruda,Line 1 treatment,2022-07-25,2022-12-19,Neoadjuvant chemo-immunotherapy
+Mid-treatment MRI,Biomarker Assess,2022-10-01,,Good response 70% shrinkage
+Bilateral Mastectomy,Milestones,2023-01-10,,Prophylactic contralateral - pCR achieved
+Breast Reconstruction,Milestones,2023-01-10,,Tissue expanders placed
+Oophorectomy,Milestones,2023-03-15,,Risk-reducing BSO for BRCA1
+Adjuvant Keytruda,Line 1 treatment,2023-02-15,2023-08-15,9 cycles maintenance
+Reconstruction Exchange,Milestones,2023-06-20,,Final implants placed
+1-Year Follow-up NED,Milestones,2024-01-10,,Cancer-free surveillance

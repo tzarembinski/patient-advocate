@@ -1,0 +1,16 @@
+Name,Category,Begin Date,End Date,Note
+Right Breast Mass,Milestones,2023-01-20,,
+Right Breast Biopsy,Biomarker Assess,2023-01-28,,TNBC Stage IIA
+Staging MRI Both Breasts,Biomarker Assess,2023-02-02,,Left breast lesion found
+Left Breast Biopsy,Biomarker Assess,2023-02-08,,Second primary TNBC Stage I
+Bilateral Synchronous TNBC,Milestones,2023-02-10,,Rare presentation
+BRCA Testing,Biomarker Assess,2023-02-15,,BRCA1 mutation confirmed
+PD-L1 Testing,Biomarker Assess,2023-02-15,,Both tumors PD-L1+
+Genetic Counseling,Milestones,2023-02-20,,Family testing recommended
+Neoadjuvant Keytruda/Chemo,Line 1 treatment,2023-03-06,2023-07-24,Treating both cancers
+Bilateral Mastectomy,Milestones,2023-08-15,,pCR both sides
+Chest Wall Radiation,Line 1 treatment,2023-09-18,2023-11-06,Bilateral radiation
+Olaparib Adjuvant,Line 1 treatment,2023-11-13,2024-11-13,PARP inhibitor for BRCA1
+Adjuvant Keytruda,Line 1 treatment,2023-11-13,2024-05-13,9 cycles
+Risk-Reducing Oophorectomy,Milestones,2024-02-15,,BSO for BRCA1
+6-Month Follow-up NED,Milestones,2024-05-15,,No evidence of disease

@@ -157,6 +157,20 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
           row["CATEGORY"] ||
           row["Type"] ||
           row["type"];
+        const note =
+          row["Note"] ||
+          row["note"] ||
+          row["NOTE"] ||
+          row["Notes"] ||
+          row["notes"];
+
+        // Helper to truncate note to first 30 words
+        const truncateToWords = (text: string, maxWords: number): string => {
+          if (!text) return "";
+          const words = String(text).trim().split(/\s+/);
+          if (words.length <= maxWords) return String(text).trim();
+          return words.slice(0, maxWords).join(" ");
+        };
 
         if (name && beginDate && category) {
           const parsedBeginDate = parseDate(beginDate);
@@ -169,6 +183,7 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
               beginDate: parsedBeginDate,
               endDate: parsedEndDate,
               category: String(category),
+              note: note ? truncateToWords(note, 30) : undefined,
             });
           }
         }
@@ -259,6 +274,7 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
                     <th className="border border-gray-300 px-3 py-2 text-left font-semibold">Begin date</th>
                     <th className="border border-gray-300 px-3 py-2 text-left font-semibold">End date</th>
                     <th className="border border-gray-300 px-3 py-2 text-left font-semibold">Category</th>
+                    <th className="border border-gray-300 px-3 py-2 text-left font-semibold">Note</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -267,18 +283,21 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
                     <td className="border border-gray-300 px-3 py-2">03/18/2025</td>
                     <td className="border border-gray-300 px-3 py-2">03/18/2025</td>
                     <td className="border border-gray-300 px-3 py-2">Milestones</td>
+                    <td className="border border-gray-300 px-3 py-2">Stage IIA confirmed</td>
                   </tr>
                   <tr>
                     <td className="border border-gray-300 px-3 py-2">Chemotherapy cycle 1</td>
                     <td className="border border-gray-300 px-3 py-2">04/01/2025</td>
                     <td className="border border-gray-300 px-3 py-2">04/21/2025</td>
                     <td className="border border-gray-300 px-3 py-2">Line 1 treatment</td>
+                    <td className="border border-gray-300 px-3 py-2">AC regimen every 2 weeks</td>
                   </tr>
                   <tr>
                     <td className="border border-gray-300 px-3 py-2">Blood test</td>
                     <td className="border border-gray-300 px-3 py-2">05/10/2025</td>
                     <td className="border border-gray-300 px-3 py-2"></td>
                     <td className="border border-gray-300 px-3 py-2">Biomarker Assess</td>
+                    <td className="border border-gray-300 px-3 py-2"></td>
                   </tr>
                 </tbody>
               </table>
@@ -295,7 +314,7 @@ const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onDataLoaded },
         )}
 
         <p className="mt-4 text-xs text-gray-500 text-center">
-          Upload a file (.xlsx, .xls, or .csv) with columns: Name, Begin date, End date (optional for milestones), Category
+          Upload a file (.xlsx, .xls, or .csv) with columns: Name, Begin date, End date (optional), Category, Note (optional, max 30 words)
         </p>
       </div>
     </div>

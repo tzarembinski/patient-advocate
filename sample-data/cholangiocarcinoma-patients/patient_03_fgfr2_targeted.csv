@@ -1,0 +1,22 @@
+Name,Category,Begin Date,End Date,Note
+Incidental Liver Lesion,Milestones,2022-09-01,,Found on screening ultrasound
+CT and MRI Liver,Biomarker Assess,2022-09-10,,3.5cm intrahepatic mass
+Liver Biopsy,Biomarker Assess,2022-09-18,,Intrahepatic cholangiocarcinoma
+CA 19-9 Baseline,Biomarker Assess,2022-09-22,,320 U/mL
+Comprehensive Genomic Profiling,Biomarker Assess,2022-09-25,,Sent to Foundation Medicine
+PET-CT Staging,Biomarker Assess,2022-10-01,,Liver only no distant mets
+Molecular Results,Biomarker Assess,2022-10-10,,FGFR2-BICC1 fusion detected
+Tumor Board,Milestones,2022-10-15,,Borderline resectable
+GemCis Cycle 1,Line 1 treatment,2022-10-24,2023-01-16,First-line standard chemotherapy
+GemCis Cycles 2-4,Line 1 treatment,2022-11-14,2023-01-16,Completing 4 cycles
+Restaging Shows Growth,Biomarker Assess,2023-01-23,,Progressive disease on chemo
+Disease Progression,Complications,2023-01-23,,Failed first-line therapy
+Pemigatinib Started,Line 2 treatment,2023-02-06,2023-08-15,FGFR inhibitor Pemazyre
+Hyperphosphatemia Management,Complications,2023-03-01,,Diet modification and binders
+6-Week Response Scan,Biomarker Assess,2023-03-20,,Partial response 42% shrinkage
+CA 19-9 Dropping,Biomarker Assess,2023-03-20,,Down to 85 U/mL
+3-Month Scan,Biomarker Assess,2023-05-06,,Continued response
+6-Month Scan,Biomarker Assess,2023-08-06,,Stable near-complete response
+Pemigatinib Resistance,Complications,2023-08-20,,New lesions appearing
+Futibatinib 3L,Line 3 treatment,2023-09-05,2024-02-10,Second-generation FGFR inhibitor
+Restaging Mixed Response,Biomarker Assess,2023-12-05,,Some lesions responding

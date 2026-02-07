@@ -1,0 +1,19 @@
+Name,Category,Begin Date,End Date,Note
+Jaundice Onset,Milestones,2023-01-15,,Yellowing of skin and eyes
+ERCP with Stent,Milestones,2023-01-20,,Biliary obstruction relieved
+CT Chest/Abdomen/Pelvis,Biomarker Assess,2023-01-25,,Perihilar mass with vascular invasion
+Brush Cytology,Biomarker Assess,2023-01-20,,Adenocarcinoma confirmed
+CA 19-9,Biomarker Assess,2023-01-28,,Markedly elevated 1200 U/mL
+Molecular Testing,Biomarker Assess,2023-02-01,,No actionable mutations MSS
+PD-L1 Testing,Biomarker Assess,2023-02-05,,CPS 5
+Unresectable Klatskin Tumor,Milestones,2023-02-08,,Stage IIIB deemed unresectable
+Port Placement,Milestones,2023-02-15,,
+GemCis Plus Durvalumab Cycle 1,Line 1 treatment,2023-02-20,2023-03-10,TOPAZ-1 regimen
+GemCis Plus Durvalumab Cycles 2-4,Line 1 treatment,2023-03-13,2023-05-22,Every 3 weeks
+Restaging CT,Biomarker Assess,2023-05-28,,Partial response 35% shrinkage
+CA 19-9 Improved,Biomarker Assess,2023-05-28,,Down to 380 U/mL
+GemCis Plus Durvalumab Cycles 5-8,Line 1 treatment,2023-06-05,2023-09-04,Continued response
+Durvalumab Maintenance,Line 1 treatment,2023-09-18,2024-03-18,Single agent after 8 cycles chemo
+6-Month Restaging,Biomarker Assess,2023-11-20,,Stable disease
+Stent Replacement,Complications,2024-01-10,,Stent occlusion managed
+12-Month Scan,Biomarker Assess,2024-02-20,,Continued stable disease

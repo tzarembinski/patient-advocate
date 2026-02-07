@@ -1,0 +1,18 @@
+Name,Category,Begin Date,End Date,Note
+Painless Jaundice,Milestones,2023-03-01,,Classic presentation
+LFTs Elevated,Biomarker Assess,2023-03-05,,Obstructive pattern
+CT Abdomen,Biomarker Assess,2023-03-08,,Distal bile duct mass 2.5cm
+MRCP,Biomarker Assess,2023-03-12,,Confirms distal CBD stricture
+EUS with FNA,Biomarker Assess,2023-03-15,,Adenocarcinoma confirmed
+CA 19-9,Biomarker Assess,2023-03-18,,185 U/mL mildly elevated
+Biliary Stent Placed,Milestones,2023-03-15,,ERCP with metal stent
+PET-CT Staging,Biomarker Assess,2023-03-22,,No distant metastases
+Molecular Testing,Biomarker Assess,2023-03-25,,No actionable mutations
+Surgical Evaluation,Milestones,2023-03-28,,Deemed resectable
+Whipple Procedure,Milestones,2023-04-12,,Pancreaticoduodenectomy R0 resection
+Post-Op Complication,Complications,2023-04-20,,Delayed gastric emptying resolved
+Pathology Final,Biomarker Assess,2023-04-25,,T2N1 2 of 18 nodes positive
+Adjuvant Capecitabine,Line 1 treatment,2023-06-01,2023-12-01,6 months per BILCAP
+CA 19-9 Normalized,Biomarker Assess,2023-07-15,,Down to 22 U/mL
+3-Month Post-Chemo Scan,Milestones,2024-03-01,,No evidence of recurrence
+6-Month Surveillance,Milestones,2024-06-01,,Remains NED

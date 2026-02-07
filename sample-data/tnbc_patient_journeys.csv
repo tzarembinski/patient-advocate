@@ -1,0 +1,232 @@
+Patient,Activity Name,Category,Begin Date,End Date,Note
+Patient 1 - Early Stage Complete Response,Initial Mammogram Abnormality,Milestones,2023-01-15,,Routine screening detected mass
+Patient 1 - Early Stage Complete Response,Core Needle Biopsy,Biomarker Assess,2023-01-22,,Stage IIA confirmed
+Patient 1 - Early Stage Complete Response,ER/PR/HER2 Testing,Biomarker Assess,2023-01-25,,Triple negative confirmed
+Patient 1 - Early Stage Complete Response,PD-L1 Testing,Biomarker Assess,2023-01-25,,CPS score 15 - positive
+Patient 1 - Early Stage Complete Response,BRCA Genetic Testing,Biomarker Assess,2023-02-01,,BRCA1 mutation detected
+Patient 1 - Early Stage Complete Response,Port Placement,Milestones,2023-02-10,,
+Patient 1 - Early Stage Complete Response,AC Chemo Cycles 1-4,Line 1 treatment,2023-02-15,2023-04-10,Doxorubicin/Cyclophosphamide every 2 weeks
+Patient 1 - Early Stage Complete Response,Keytruda Cycles 1-4,Line 1 treatment,2023-02-15,2023-04-10,Pembrolizumab with AC
+Patient 1 - Early Stage Complete Response,Taxol Cycles 1-12,Line 1 treatment,2023-04-17,2023-07-03,Weekly paclitaxel
+Patient 1 - Early Stage Complete Response,Keytruda Cycles 5-8,Line 1 treatment,2023-04-17,2023-07-03,Pembrolizumab continued
+Patient 1 - Early Stage Complete Response,Pre-surgical MRI,Biomarker Assess,2023-07-10,,Complete radiologic response
+Patient 1 - Early Stage Complete Response,Lumpectomy with SLNB,Milestones,2023-07-20,,Pathologic complete response - pCR
+Patient 1 - Early Stage Complete Response,Radiation Therapy,Line 1 treatment,2023-08-21,2023-10-02,30 fractions whole breast
+Patient 1 - Early Stage Complete Response,Adjuvant Keytruda,Line 1 treatment,2023-10-09,2024-04-15,Pembrolizumab maintenance 9 cycles
+Patient 1 - Early Stage Complete Response,Olaparib Started,Line 1 treatment,2023-10-09,2024-10-09,PARP inhibitor for BRCA1 - 1 year
+Patient 1 - Early Stage Complete Response,6-Month Follow-up Clear,Milestones,2024-01-20,,No evidence of disease
+Patient 1 - Early Stage Complete Response,12-Month Follow-up Clear,Milestones,2024-07-20,,NED continued
+
+Patient 2 - Stage III Partial Response,Self-detected Breast Lump,Milestones,2022-09-01,,
+Patient 2 - Stage III Partial Response,Diagnostic Mammogram and Ultrasound,Biomarker Assess,2022-09-08,,4.5cm mass with suspicious nodes
+Patient 2 - Stage III Partial Response,Core Biopsy,Biomarker Assess,2022-09-12,,Stage IIIA T2N2 confirmed
+Patient 2 - Stage III Partial Response,ER/PR/HER2 Panel,Biomarker Assess,2022-09-15,,Triple negative Ki-67 80%
+Patient 2 - Stage III Partial Response,PD-L1 Testing,Biomarker Assess,2022-09-15,,CPS score 2 - negative
+Patient 2 - Stage III Partial Response,BRCA Testing,Biomarker Assess,2022-09-20,,No pathogenic variants
+Patient 2 - Stage III Partial Response,Staging CT and Bone Scan,Biomarker Assess,2022-09-25,,No distant metastases
+Patient 2 - Stage III Partial Response,Dose-Dense AC Cycles 1-4,Line 1 treatment,2022-10-03,2022-11-28,ddAC every 2 weeks with Neulasta
+Patient 2 - Stage III Partial Response,Taxol/Carboplatin Cycles 1-4,Line 1 treatment,2022-12-05,2023-02-20,Weekly taxol with carboplatin
+Patient 2 - Stage III Partial Response,Pre-op MRI,Biomarker Assess,2023-03-01,,Partial response 60% reduction
+Patient 2 - Stage III Partial Response,Modified Radical Mastectomy,Milestones,2023-03-15,,Residual 1.8cm tumor 2/15 nodes positive
+Patient 2 - Stage III Partial Response,Post-Mastectomy Radiation,Line 1 treatment,2023-04-17,2023-06-05,Chest wall and nodal radiation
+Patient 2 - Stage III Partial Response,Capecitabine Adjuvant,Line 1 treatment,2023-06-12,2024-06-12,Xeloda 8 cycles for residual disease
+Patient 2 - Stage III Partial Response,3-Month Surveillance,Milestones,2023-09-15,,No recurrence
+Patient 2 - Stage III Partial Response,6-Month Surveillance,Milestones,2023-12-15,,Stable
+Patient 2 - Stage III Partial Response,Chest Wall Recurrence Detected,Complications,2024-04-20,,Local recurrence on imaging
+
+Patient 3 - Metastatic at Diagnosis,Back Pain Workup,Milestones,2023-03-10,,
+Patient 3 - Metastatic at Diagnosis,Spine MRI,Biomarker Assess,2023-03-15,,Multiple vertebral lesions
+Patient 3 - Metastatic at Diagnosis,Breast Mass Discovered,Milestones,2023-03-18,,5cm right breast mass
+Patient 3 - Metastatic at Diagnosis,Core Biopsy Breast,Biomarker Assess,2023-03-22,,Invasive ductal carcinoma
+Patient 3 - Metastatic at Diagnosis,ER/PR/HER2 Testing,Biomarker Assess,2023-03-25,,Triple negative confirmed
+Patient 3 - Metastatic at Diagnosis,PD-L1 Testing,Biomarker Assess,2023-03-25,,CPS score 25 - strongly positive
+Patient 3 - Metastatic at Diagnosis,CT Chest/Abdomen/Pelvis,Biomarker Assess,2023-03-28,,Liver and lung mets confirmed Stage IV
+Patient 3 - Metastatic at Diagnosis,BRCA Testing,Biomarker Assess,2023-04-01,,BRCA2 mutation detected
+Patient 3 - Metastatic at Diagnosis,Spine Radiation Palliative,Line 1 treatment,2023-04-05,2023-04-14,Pain control 10 fractions
+Patient 3 - Metastatic at Diagnosis,Keytruda/Abraxane 1L,Line 1 treatment,2023-04-17,2023-10-30,Pembrolizumab plus nab-paclitaxel
+Patient 3 - Metastatic at Diagnosis,3-Month Restaging CT,Biomarker Assess,2023-07-20,,Partial response 40% reduction
+Patient 3 - Metastatic at Diagnosis,6-Month Restaging CT,Biomarker Assess,2023-10-20,,Stable disease
+Patient 3 - Metastatic at Diagnosis,Disease Progression,Complications,2023-11-15,,New liver lesions on CT
+Patient 3 - Metastatic at Diagnosis,Olaparib 2L,Line 2 treatment,2023-11-25,2024-05-20,PARP inhibitor for BRCA2
+Patient 3 - Metastatic at Diagnosis,Restaging Shows Response,Biomarker Assess,2024-02-25,,Liver mets shrinking
+Patient 3 - Metastatic at Diagnosis,Brain MRI for Headaches,Biomarker Assess,2024-05-15,,Brain metastases found
+Patient 3 - Metastatic at Diagnosis,Brain Progression,Complications,2024-05-15,,CNS involvement
+Patient 3 - Metastatic at Diagnosis,Whole Brain Radiation,Line 2 treatment,2024-05-22,2024-06-05,WBRT 10 fractions
+Patient 3 - Metastatic at Diagnosis,Trodelvy 3L,Line 3 treatment,2024-06-15,2024-10-15,Sacituzumab govitecan
+
+Patient 4 - Young Patient Aggressive,Breast Lump Age 32,Milestones,2022-06-01,,Self-detected growing mass
+Patient 4 - Young Patient Aggressive,Ultrasound and Mammogram,Biomarker Assess,2022-06-08,,3.2cm irregular mass
+Patient 4 - Young Patient Aggressive,Core Needle Biopsy,Biomarker Assess,2022-06-12,,High grade IDC
+Patient 4 - Young Patient Aggressive,Receptor Testing,Biomarker Assess,2022-06-15,,ER 0% PR 0% HER2 negative Ki-67 90%
+Patient 4 - Young Patient Aggressive,Genetic Counseling,Milestones,2022-06-20,,Family history reviewed
+Patient 4 - Young Patient Aggressive,BRCA1/2 and Panel Testing,Biomarker Assess,2022-06-25,,BRCA1 positive
+Patient 4 - Young Patient Aggressive,Fertility Consultation,Milestones,2022-06-28,,Egg freezing discussed
+Patient 4 - Young Patient Aggressive,Egg Retrieval,Milestones,2022-07-10,,Fertility preservation completed
+Patient 4 - Young Patient Aggressive,Staging Scans,Biomarker Assess,2022-07-15,,Stage IIB no mets
+Patient 4 - Young Patient Aggressive,PD-L1 Testing,Biomarker Assess,2022-07-18,,CPS 12 positive
+Patient 4 - Young Patient Aggressive,AC-T with Keytruda,Line 1 treatment,2022-07-25,2022-12-19,Neoadjuvant chemo-immunotherapy
+Patient 4 - Young Patient Aggressive,Mid-treatment MRI,Biomarker Assess,2022-10-01,,Good response 70% shrinkage
+Patient 4 - Young Patient Aggressive,Bilateral Mastectomy,Milestones,2023-01-10,,Prophylactic contralateral - pCR achieved
+Patient 4 - Young Patient Aggressive,Breast Reconstruction,Milestones,2023-01-10,,Tissue expanders placed
+Patient 4 - Young Patient Aggressive,Oophorectomy,Milestones,2023-03-15,,Risk-reducing BSO for BRCA1
+Patient 4 - Young Patient Aggressive,Adjuvant Keytruda,Line 1 treatment,2023-02-15,2023-08-15,9 cycles maintenance
+Patient 4 - Young Patient Aggressive,Reconstruction Exchange,Milestones,2023-06-20,,Final implants placed
+Patient 4 - Young Patient Aggressive,1-Year Follow-up NED,Milestones,2024-01-10,,Cancer-free surveillance
+
+Patient 5 - Elderly with Comorbidities,Screening Mammogram Age 74,Milestones,2023-05-01,,
+Patient 5 - Elderly with Comorbidities,Abnormal Finding Workup,Biomarker Assess,2023-05-10,,2.1cm mass
+Patient 5 - Elderly with Comorbidities,Biopsy,Biomarker Assess,2023-05-15,,Stage I TNBC
+Patient 5 - Elderly with Comorbidities,Receptor Testing,Biomarker Assess,2023-05-18,,Triple negative low Ki-67 30%
+Patient 5 - Elderly with Comorbidities,Cardiac Clearance,Biomarker Assess,2023-05-25,,EF 45% - limited options
+Patient 5 - Elderly with Comorbidities,Lumpectomy Upfront,Milestones,2023-06-10,,Surgery first approach
+Patient 5 - Elderly with Comorbidities,TC Chemotherapy,Line 1 treatment,2023-07-10,2023-10-02,Taxotere/Cytoxan 4 cycles - no anthracycline
+Patient 5 - Elderly with Comorbidities,Neutropenic Fever,Complications,2023-08-20,,Hospitalized 4 days
+Patient 5 - Elderly with Comorbidities,Radiation Therapy,Line 1 treatment,2023-10-23,2023-12-04,Hypofractionated 16 fractions
+Patient 5 - Elderly with Comorbidities,3-Month Follow-up,Milestones,2024-01-15,,No recurrence
+Patient 5 - Elderly with Comorbidities,6-Month Follow-up,Milestones,2024-04-15,,Stable
+
+Patient 6 - Recurrence After Initial Cure,Initial Diagnosis Stage I,Milestones,2020-03-01,,
+Patient 6 - Recurrence After Initial Cure,Lumpectomy,Milestones,2020-03-20,,Clear margins obtained
+Patient 6 - Recurrence After Initial Cure,Receptor Testing,Biomarker Assess,2020-03-25,,Triple negative
+Patient 6 - Recurrence After Initial Cure,Adjuvant AC-T Chemo,Line 1 treatment,2020-04-15,2020-09-01,Standard adjuvant regimen
+Patient 6 - Recurrence After Initial Cure,Radiation,Line 1 treatment,2020-09-15,2020-10-25,Whole breast radiation
+Patient 6 - Recurrence After Initial Cure,Year 1 Surveillance Clear,Milestones,2021-03-20,,NED
+Patient 6 - Recurrence After Initial Cure,Year 2 Surveillance Clear,Milestones,2022-03-20,,NED continued
+Patient 6 - Recurrence After Initial Cure,New Cough Develops,Milestones,2023-01-15,,
+Patient 6 - Recurrence After Initial Cure,CT Chest,Biomarker Assess,2023-01-22,,Multiple lung nodules
+Patient 6 - Recurrence After Initial Cure,Lung Biopsy,Biomarker Assess,2023-01-30,,Metastatic breast cancer confirmed
+Patient 6 - Recurrence After Initial Cure,Distant Recurrence,Complications,2023-02-01,,Stage IV disease
+Patient 6 - Recurrence After Initial Cure,PD-L1 Retesting,Biomarker Assess,2023-02-05,,CPS 8 positive
+Patient 6 - Recurrence After Initial Cure,BRCA Testing,Biomarker Assess,2023-02-05,,Negative
+Patient 6 - Recurrence After Initial Cure,Keytruda/Gemcitabine/Carboplatin,Line 2 treatment,2023-02-20,2023-08-15,First line for metastatic
+Patient 6 - Recurrence After Initial Cure,Restaging PR,Biomarker Assess,2023-05-20,,Partial response
+Patient 6 - Recurrence After Initial Cure,Progression on 1L,Complications,2023-08-20,,Liver mets appeared
+Patient 6 - Recurrence After Initial Cure,Trodelvy 2L Metastatic,Line 3 treatment,2023-09-01,2024-03-15,Sacituzumab govitecan
+Patient 6 - Recurrence After Initial Cure,Stable Disease,Biomarker Assess,2023-12-01,,Liver mets stable
+Patient 6 - Recurrence After Initial Cure,CNS Progression,Complications,2024-03-20,,Brain mets found
+Patient 6 - Recurrence After Initial Cure,SRS Brain,Line 3 treatment,2024-04-01,2024-04-05,Stereotactic radiosurgery 3 lesions
+
+Patient 7 - Inflammatory Breast Cancer,Breast Redness and Swelling,Milestones,2022-11-01,,Skin changes over 2 weeks
+Patient 7 - Inflammatory Breast Cancer,Urgent Breast Clinic,Milestones,2022-11-08,,Suspected IBC
+Patient 7 - Inflammatory Breast Cancer,Skin Punch Biopsy,Biomarker Assess,2022-11-10,,Dermal lymphatic invasion
+Patient 7 - Inflammatory Breast Cancer,Core Biopsy,Biomarker Assess,2022-11-12,,High grade IDC
+Patient 7 - Inflammatory Breast Cancer,Receptor Testing,Biomarker Assess,2022-11-15,,Triple negative confirmed
+Patient 7 - Inflammatory Breast Cancer,PET-CT Staging,Biomarker Assess,2022-11-18,,Stage IIIB no distant mets
+Patient 7 - Inflammatory Breast Cancer,PD-L1 Testing,Biomarker Assess,2022-11-20,,CPS 18 positive
+Patient 7 - Inflammatory Breast Cancer,Dose-Dense AC,Line 1 treatment,2022-11-28,2023-01-23,Every 2 weeks with growth factor
+Patient 7 - Inflammatory Breast Cancer,Keytruda Started,Line 1 treatment,2022-11-28,2023-06-15,Concurrent with all chemo
+Patient 7 - Inflammatory Breast Cancer,Taxol/Carboplatin,Line 1 treatment,2023-01-30,2023-04-10,Weekly taxol with carbo
+Patient 7 - Inflammatory Breast Cancer,Clinical Response,Biomarker Assess,2023-04-15,,Skin changes resolved
+Patient 7 - Inflammatory Breast Cancer,Modified Radical Mastectomy,Milestones,2023-05-01,,Near complete response
+Patient 7 - Inflammatory Breast Cancer,Post-Mastectomy XRT,Line 1 treatment,2023-06-05,2023-07-21,Aggressive chest wall radiation
+Patient 7 - Inflammatory Breast Cancer,Capecitabine Adjuvant,Line 1 treatment,2023-08-01,2024-02-01,For residual disease
+Patient 7 - Inflammatory Breast Cancer,Adjuvant Keytruda,Line 1 treatment,2023-08-01,2024-02-01,Continuing immunotherapy
+Patient 7 - Inflammatory Breast Cancer,6-Month Post-Treatment,Milestones,2024-02-15,,No recurrence
+
+Patient 8 - pCR with Short Follow-up,Screening Detected,Milestones,2024-01-10,,
+Patient 8 - pCR with Short Follow-up,Biopsy,Biomarker Assess,2024-01-18,,Stage IIA TNBC
+Patient 8 - pCR with Short Follow-up,Full Biomarker Panel,Biomarker Assess,2024-01-22,,TN PD-L1+ BRCA negative
+Patient 8 - pCR with Short Follow-up,Neoadjuvant Keytruda/Chemo,Line 1 treatment,2024-02-05,2024-06-24,Standard KEYNOTE-522 regimen
+Patient 8 - pCR with Short Follow-up,Mid-Treatment Response,Biomarker Assess,2024-04-15,,Excellent response
+Patient 8 - pCR with Short Follow-up,Lumpectomy,Milestones,2024-07-15,,pCR achieved no residual tumor
+Patient 8 - pCR with Short Follow-up,Radiation,Line 1 treatment,2024-08-19,2024-09-30,Standard fractionation
+Patient 8 - pCR with Short Follow-up,Adjuvant Keytruda Ongoing,Line 1 treatment,2024-10-07,2025-04-07,9 cycles planned
+
+Patient 9 - BRCA2 with Olaparib Response,Self-Detected Mass,Milestones,2023-02-01,,
+Patient 9 - BRCA2 with Olaparib Response,Diagnostic Workup,Biomarker Assess,2023-02-10,,3.8cm mass Stage IIB
+Patient 9 - BRCA2 with Olaparib Response,Biopsy and Receptors,Biomarker Assess,2023-02-15,,Triple negative
+Patient 9 - BRCA2 with Olaparib Response,BRCA Testing,Biomarker Assess,2023-02-20,,BRCA2 pathogenic variant
+Patient 9 - BRCA2 with Olaparib Response,PD-L1,Biomarker Assess,2023-02-20,,CPS 5 borderline
+Patient 9 - BRCA2 with Olaparib Response,Neoadjuvant AC-T,Line 1 treatment,2023-03-06,2023-07-24,Standard regimen
+Patient 9 - BRCA2 with Olaparib Response,Mastectomy,Milestones,2023-08-15,,1.2cm residual tumor
+Patient 9 - BRCA2 with Olaparib Response,Radiation,Line 1 treatment,2023-09-18,2023-10-30,Post-mastectomy XRT
+Patient 9 - BRCA2 with Olaparib Response,Olaparib Adjuvant,Line 1 treatment,2023-11-06,2024-11-06,1 year PARP inhibitor
+Patient 9 - BRCA2 with Olaparib Response,3-Month Check,Milestones,2024-02-15,,No recurrence
+Patient 9 - BRCA2 with Olaparib Response,6-Month Check,Milestones,2024-05-15,,Doing well
+Patient 9 - BRCA2 with Olaparib Response,9-Month Check,Milestones,2024-08-15,,NED continues
+
+Patient 10 - Oligometastatic Treated Aggressively,Back Pain and Fatigue,Milestones,2023-06-01,,
+Patient 10 - Oligometastatic Treated Aggressively,PET-CT Scan,Biomarker Assess,2023-06-10,,Breast mass plus 2 bone mets
+Patient 10 - Oligometastatic Treated Aggressively,Breast Biopsy,Biomarker Assess,2023-06-15,,TNBC confirmed
+Patient 10 - Oligometastatic Treated Aggressively,Bone Biopsy,Biomarker Assess,2023-06-18,,Metastatic breast confirmed
+Patient 10 - Oligometastatic Treated Aggressively,Full Biomarker Panel,Biomarker Assess,2023-06-22,,TN PD-L1+ CPS 20 BRCA negative
+Patient 10 - Oligometastatic Treated Aggressively,SBRT to Bone Mets,Line 1 treatment,2023-07-01,2023-07-12,Stereotactic radiation 2 sites
+Patient 10 - Oligometastatic Treated Aggressively,Keytruda/Abraxane,Line 1 treatment,2023-07-17,2024-01-15,Systemic therapy
+Patient 10 - Oligometastatic Treated Aggressively,3-Month Restaging,Biomarker Assess,2023-10-17,,Complete response bone PR breast
+Patient 10 - Oligometastatic Treated Aggressively,Mastectomy,Milestones,2024-02-01,,Consolidative surgery
+Patient 10 - Oligometastatic Treated Aggressively,Post-Mastectomy XRT,Line 1 treatment,2024-03-04,2024-04-15,Chest wall radiation
+Patient 10 - Oligometastatic Treated Aggressively,Maintenance Keytruda,Line 1 treatment,2024-04-22,2024-10-22,Continuing immunotherapy
+Patient 10 - Oligometastatic Treated Aggressively,6-Month Post-Surgery,Milestones,2024-08-01,,NED on scans
+
+Patient 11 - Rapid Progression,Breast Lump Noticed,Milestones,2023-04-01,,
+Patient 11 - Rapid Progression,Urgent Workup,Biomarker Assess,2023-04-08,,4cm mass suspicious nodes
+Patient 11 - Rapid Progression,Biopsy,Biomarker Assess,2023-04-12,,Stage IIIA TNBC
+Patient 11 - Rapid Progression,PD-L1 and BRCA,Biomarker Assess,2023-04-15,,PD-L1 negative BRCA negative
+Patient 11 - Rapid Progression,Neoadjuvant AC Started,Line 1 treatment,2023-04-24,2023-06-19,Dose-dense AC
+Patient 11 - Rapid Progression,Mid-Chemo Progression,Complications,2023-06-01,,Tumor growing on treatment
+Patient 11 - Rapid Progression,Switched to Taxol/Carbo,Line 1 treatment,2023-06-26,2023-09-11,Changed regimen
+Patient 11 - Rapid Progression,Restaging Shows Mets,Biomarker Assess,2023-09-18,,New liver lesions - now Stage IV
+Patient 11 - Rapid Progression,Liver Metastases,Complications,2023-09-18,,Disease escaped
+Patient 11 - Rapid Progression,Trodelvy Started,Line 2 treatment,2023-10-02,2024-02-15,Sacituzumab govitecan
+Patient 11 - Rapid Progression,Partial Response,Biomarker Assess,2023-12-15,,Liver mets shrinking
+Patient 11 - Rapid Progression,Progression on Trodelvy,Complications,2024-02-20,,New lung mets
+Patient 11 - Rapid Progression,Eribulin 3L,Line 3 treatment,2024-03-04,2024-06-10,Halaven
+Patient 11 - Rapid Progression,Hospice Referral,Milestones,2024-06-15,,Goals of care discussion
+
+Patient 12 - Node Positive Good Response,Lump with Swollen Armpit,Milestones,2023-08-01,,
+Patient 12 - Node Positive Good Response,Mammogram and Ultrasound,Biomarker Assess,2023-08-08,,2.5cm mass plus lymph nodes
+Patient 12 - Node Positive Good Response,Breast and Node Biopsy,Biomarker Assess,2023-08-12,,Stage IIB T2N1
+Patient 12 - Node Positive Good Response,Receptor Testing,Biomarker Assess,2023-08-15,,TNBC confirmed
+Patient 12 - Node Positive Good Response,PD-L1 Positive,Biomarker Assess,2023-08-18,,CPS 22
+Patient 12 - Node Positive Good Response,BRCA Negative,Biomarker Assess,2023-08-22,,No germline mutation
+Patient 12 - Node Positive Good Response,Keytruda/AC,Line 1 treatment,2023-09-04,2023-10-30,Pembrolizumab with AC x4
+Patient 12 - Node Positive Good Response,Keytruda/Taxol/Carbo,Line 1 treatment,2023-11-06,2024-02-05,Pembro with weekly taxol carbo
+Patient 12 - Node Positive Good Response,Excellent MRI Response,Biomarker Assess,2024-02-12,,Near complete response
+Patient 12 - Node Positive Good Response,Lumpectomy and ALND,Milestones,2024-02-26,,pCR in breast 0/12 nodes
+Patient 12 - Node Positive Good Response,Radiation Therapy,Line 1 treatment,2024-04-01,2024-05-13,Breast and nodal radiation
+Patient 12 - Node Positive Good Response,Adjuvant Keytruda,Line 1 treatment,2024-05-20,2024-11-20,9 cycles maintenance
+Patient 12 - Node Positive Good Response,3-Month Surveillance,Milestones,2024-08-26,,No evidence of disease
+
+Patient 13 - Treatment Delays,Mass Found,Milestones,2023-03-15,,
+Patient 13 - Treatment Delays,Biopsy Delayed - Insurance,Milestones,2023-04-10,,Prior auth required
+Patient 13 - Treatment Delays,Biopsy Completed,Biomarker Assess,2023-04-25,,Stage IIA TNBC
+Patient 13 - Treatment Delays,Receptor Results,Biomarker Assess,2023-04-30,,Triple negative PD-L1 negative
+Patient 13 - Treatment Delays,BRCA Testing,Biomarker Assess,2023-05-10,,Negative
+Patient 13 - Treatment Delays,Port Placement Delayed,Complications,2023-05-25,,Scheduling issues
+Patient 13 - Treatment Delays,Port Placed,Milestones,2023-06-05,,
+Patient 13 - Treatment Delays,AC Chemotherapy,Line 1 treatment,2023-06-12,2023-08-07,4 cycles AC
+Patient 13 - Treatment Delays,Taxol Chemotherapy,Line 1 treatment,2023-08-14,2023-11-06,12 weeks weekly
+Patient 13 - Treatment Delays,Lumpectomy,Milestones,2023-11-28,,Residual 0.8cm tumor
+Patient 13 - Treatment Delays,Capecitabine Added,Line 1 treatment,2023-12-18,2024-06-18,For non-pCR
+Patient 13 - Treatment Delays,Radiation,Line 1 treatment,2024-01-08,2024-02-19,Whole breast XRT
+Patient 13 - Treatment Delays,6-Month Post-Op,Milestones,2024-05-28,,No recurrence
+
+Patient 14 - Clinical Trial Participant,Referred to Academic Center,Milestones,2023-07-01,,Seeking trial options
+Patient 14 - Clinical Trial Participant,Baseline Biopsy,Biomarker Assess,2023-07-10,,Stage IIB TNBC
+Patient 14 - Clinical Trial Participant,Extended Biomarker Panel,Biomarker Assess,2023-07-15,,TN PD-L1+ BRCA- TMB-high
+Patient 14 - Clinical Trial Participant,Clinical Trial Screening,Biomarker Assess,2023-07-20,,Novel immunotherapy combination
+Patient 14 - Clinical Trial Participant,Trial Enrollment,Milestones,2023-07-28,,Randomized to experimental arm
+Patient 14 - Clinical Trial Participant,Experimental IO Combo,Line 1 treatment,2023-08-07,2024-01-29,Novel PD-1 plus LAG-3 inhibitor
+Patient 14 - Clinical Trial Participant,Research Biopsy Week 6,Biomarker Assess,2023-09-18,,Immune infiltration increased
+Patient 14 - Clinical Trial Participant,Taxol Added per Protocol,Line 1 treatment,2023-09-25,2023-12-18,Chemotherapy backbone added
+Patient 14 - Clinical Trial Participant,Imaging Shows pCR,Biomarker Assess,2024-02-05,,Complete radiologic response
+Patient 14 - Clinical Trial Participant,Lumpectomy,Milestones,2024-02-20,,Pathologic complete response
+Patient 14 - Clinical Trial Participant,Radiation per Protocol,Line 1 treatment,2024-03-25,2024-05-06,Standard WBI
+Patient 14 - Clinical Trial Participant,Adjuvant Trial Drug,Line 1 treatment,2024-05-13,2024-11-13,Maintenance phase of trial
+Patient 14 - Clinical Trial Participant,Trial Follow-up Visit,Milestones,2024-08-20,,Protocol surveillance NED
+
+Patient 15 - Bilateral TNBC,Right Breast Mass,Milestones,2023-01-20,,
+Patient 15 - Bilateral TNBC,Right Breast Biopsy,Biomarker Assess,2023-01-28,,TNBC Stage IIA
+Patient 15 - Bilateral TNBC,Staging MRI Both Breasts,Biomarker Assess,2023-02-02,,Left breast lesion found
+Patient 15 - Bilateral TNBC,Left Breast Biopsy,Biomarker Assess,2023-02-08,,Second primary TNBC Stage I
+Patient 15 - Bilateral TNBC,Bilateral Synchronous TNBC,Milestones,2023-02-10,,Rare presentation
+Patient 15 - Bilateral TNBC,BRCA Testing,Biomarker Assess,2023-02-15,,BRCA1 mutation confirmed
+Patient 15 - Bilateral TNBC,PD-L1 Testing,Biomarker Assess,2023-02-15,,Both tumors PD-L1+
+Patient 15 - Bilateral TNBC,Genetic Counseling,Milestones,2023-02-20,,Family testing recommended
+Patient 15 - Bilateral TNBC,Neoadjuvant Keytruda/Chemo,Line 1 treatment,2023-03-06,2023-07-24,Treating both cancers
+Patient 15 - Bilateral TNBC,Bilateral Mastectomy,Milestones,2023-08-15,,pCR both sides
+Patient 15 - Bilateral TNBC,Chest Wall Radiation,Line 1 treatment,2023-09-18,2023-11-06,Bilateral radiation
+Patient 15 - Bilateral TNBC,Olaparib Adjuvant,Line 1 treatment,2023-11-13,2024-11-13,PARP inhibitor for BRCA1
+Patient 15 - Bilateral TNBC,Adjuvant Keytruda,Line 1 treatment,2023-11-13,2024-05-13,9 cycles
+Patient 15 - Bilateral TNBC,Risk-Reducing Oophorectomy,Milestones,2024-02-15,,BSO for BRCA1
+Patient 15 - Bilateral TNBC,6-Month Follow-up NED,Milestones,2024-05-15,,No evidence of disease

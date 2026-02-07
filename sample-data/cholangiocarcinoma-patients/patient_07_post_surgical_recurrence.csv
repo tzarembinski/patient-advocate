@@ -1,0 +1,19 @@
+Name,Category,Begin Date,End Date,Note
+Incidental Finding on CT,Milestones,2021-08-01,,CT for kidney stones found liver mass
+MRI Liver,Biomarker Assess,2021-08-10,,2.8cm intrahepatic lesion
+Liver Biopsy,Biomarker Assess,2021-08-18,,Cholangiocarcinoma confirmed
+Staging Workup,Biomarker Assess,2021-08-25,,No metastatic disease
+CA 19-9,Biomarker Assess,2021-08-25,,145 U/mL
+Right Hepatectomy,Milestones,2021-09-15,,R0 resection achieved
+Pathology,Biomarker Assess,2021-09-22,,T1N0 favorable pathology
+Adjuvant Capecitabine,Line 1 treatment,2021-10-20,2022-04-20,6 months adjuvant
+6-Month Surveillance,Milestones,2022-04-20,,NED
+12-Month Surveillance,Milestones,2022-09-15,,NED continued
+18-Month Surveillance,Milestones,2023-03-15,,NED
+24-Month Rising CA 19-9,Biomarker Assess,2023-09-15,,Increased to 85 U/mL
+CT Shows Recurrence,Biomarker Assess,2023-09-25,,Peritoneal nodules detected
+Peritoneal Recurrence,Complications,2023-09-25,,Disease recurrence 2 years post-op
+Molecular Testing Repeated,Biomarker Assess,2023-10-01,,FGFR2 fusion now detected
+GemCis Durvalumab,Line 2 treatment,2023-10-15,2024-04-15,First-line for recurrence
+Restaging Stable,Biomarker Assess,2024-01-15,,Stable disease
+Pemigatinib Planned,Milestones,2024-04-20,,FGFR inhibitor after chemo

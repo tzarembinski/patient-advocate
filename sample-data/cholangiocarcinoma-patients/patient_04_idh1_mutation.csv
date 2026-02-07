@@ -1,0 +1,20 @@
+Name,Category,Begin Date,End Date,Note
+Right Upper Quadrant Pain,Milestones,2022-11-01,,Intermittent pain 6 weeks
+Ultrasound Abdomen,Biomarker Assess,2022-11-08,,Liver mass identified
+MRI with Primovist,Biomarker Assess,2022-11-15,,4.2cm intrahepatic CCA features
+CT Chest,Biomarker Assess,2022-11-18,,Lung nodules concerning for mets
+Liver Biopsy,Biomarker Assess,2022-11-22,,Intrahepatic cholangiocarcinoma confirmed
+Lung Nodule Biopsy,Biomarker Assess,2022-11-28,,Metastatic CCA confirmed
+Stage IV Diagnosis,Milestones,2022-12-01,,Liver primary with lung mets
+CA 19-9,Biomarker Assess,2022-12-01,,580 U/mL
+Molecular Profiling,Biomarker Assess,2022-12-05,,IDH1 R132C mutation detected
+GemCis Durvalumab 1L,Line 1 treatment,2022-12-15,2023-05-25,8 cycles first-line
+3-Month Restaging,Biomarker Assess,2023-03-15,,Stable disease
+6-Month Restaging,Biomarker Assess,2023-06-01,,Slow progression in lung
+Progression on 1L,Complications,2023-06-05,,
+Ivosidenib Started,Line 2 treatment,2023-06-20,2024-01-15,Tibsovo for IDH1 mutation
+8-Week Scan,Biomarker Assess,2023-08-15,,Disease stabilization
+CA 19-9 Stable,Biomarker Assess,2023-08-15,,Holding at 290 U/mL
+4-Month Scan,Biomarker Assess,2023-10-20,,Continued stable disease
+Durable Stability,Biomarker Assess,2024-01-10,,7 months on ivosidenib
+FOLFOX 3L Started,Line 3 treatment,2024-01-25,2024-06-15,After ivosidenib progression

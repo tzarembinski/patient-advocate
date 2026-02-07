@@ -1,0 +1,17 @@
+Name,Category,Begin Date,End Date,Note
+Breast Redness and Swelling,Milestones,2022-11-01,,Skin changes over 2 weeks
+Urgent Breast Clinic,Milestones,2022-11-08,,Suspected IBC
+Skin Punch Biopsy,Biomarker Assess,2022-11-10,,Dermal lymphatic invasion
+Core Biopsy,Biomarker Assess,2022-11-12,,High grade IDC
+Receptor Testing,Biomarker Assess,2022-11-15,,Triple negative confirmed
+PET-CT Staging,Biomarker Assess,2022-11-18,,Stage IIIB no distant mets
+PD-L1 Testing,Biomarker Assess,2022-11-20,,CPS 18 positive
+Dose-Dense AC,Line 1 treatment,2022-11-28,2023-01-23,Every 2 weeks with growth factor
+Keytruda Started,Line 1 treatment,2022-11-28,2023-06-15,Concurrent with all chemo
+Taxol/Carboplatin,Line 1 treatment,2023-01-30,2023-04-10,Weekly taxol with carbo
+Clinical Response,Biomarker Assess,2023-04-15,,Skin changes resolved
+Modified Radical Mastectomy,Milestones,2023-05-01,,Near complete response
+Post-Mastectomy XRT,Line 1 treatment,2023-06-05,2023-07-21,Aggressive chest wall radiation
+Capecitabine Adjuvant,Line 1 treatment,2023-08-01,2024-02-01,For residual disease
+Adjuvant Keytruda,Line 1 treatment,2023-08-01,2024-02-01,Continuing immunotherapy
+6-Month Post-Treatment,Milestones,2024-02-15,,No recurrence

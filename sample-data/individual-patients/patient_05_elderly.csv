@@ -1,0 +1,12 @@
+Name,Category,Begin Date,End Date,Note
+Screening Mammogram Age 74,Milestones,2023-05-01,,
+Abnormal Finding Workup,Biomarker Assess,2023-05-10,,2.1cm mass
+Biopsy,Biomarker Assess,2023-05-15,,Stage I TNBC
+Receptor Testing,Biomarker Assess,2023-05-18,,Triple negative low Ki-67 30%
+Cardiac Clearance,Biomarker Assess,2023-05-25,,EF 45% - limited options
+Lumpectomy Upfront,Milestones,2023-06-10,,Surgery first approach
+TC Chemotherapy,Line 1 treatment,2023-07-10,2023-10-02,Taxotere/Cytoxan 4 cycles - no anthracycline
+Neutropenic Fever,Complications,2023-08-20,,Hospitalized 4 days
+Radiation Therapy,Line 1 treatment,2023-10-23,2023-12-04,Hypofractionated 16 fractions
+3-Month Follow-up,Milestones,2024-01-15,,No recurrence
+6-Month Follow-up,Milestones,2024-04-15,,Stable

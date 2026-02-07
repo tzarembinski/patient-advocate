@@ -1,0 +1,15 @@
+Name,Category,Begin Date,End Date,Note
+Breast Lump Noticed,Milestones,2023-04-01,,
+Urgent Workup,Biomarker Assess,2023-04-08,,4cm mass suspicious nodes
+Biopsy,Biomarker Assess,2023-04-12,,Stage IIIA TNBC
+PD-L1 and BRCA,Biomarker Assess,2023-04-15,,PD-L1 negative BRCA negative
+Neoadjuvant AC Started,Line 1 treatment,2023-04-24,2023-06-19,Dose-dense AC
+Mid-Chemo Progression,Complications,2023-06-01,,Tumor growing on treatment
+Switched to Taxol/Carbo,Line 1 treatment,2023-06-26,2023-09-11,Changed regimen
+Restaging Shows Mets,Biomarker Assess,2023-09-18,,New liver lesions - now Stage IV
+Liver Metastases,Complications,2023-09-18,,Disease escaped
+Trodelvy Started,Line 2 treatment,2023-10-02,2024-02-15,Sacituzumab govitecan
+Partial Response,Biomarker Assess,2023-12-15,,Liver mets shrinking
+Progression on Trodelvy,Complications,2024-02-20,,New lung mets
+Eribulin 3L,Line 3 treatment,2024-03-04,2024-06-10,Halaven
+Hospice Referral,Milestones,2024-06-15,,Goals of care discussion

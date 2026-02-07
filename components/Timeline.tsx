@@ -413,8 +413,8 @@ export default function Timeline({
                     </p>
                   </div>
 
-                  {/* Timeline lane - increased height for better visibility */}
-                  <div className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200 h-[48px] md:h-[56px]`}>
+                  {/* Timeline lane - increased height for overlapping items */}
+                  <div className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200 h-[72px] md:h-[80px]`}>
                     {/* Vertical grid lines for months */}
                     {months.map((month, mIndex) => {
                       const position = getMonthPosition(month);
@@ -438,6 +438,33 @@ export default function Timeline({
                       // Threshold for "short" bars that need external labels (2% of timeline width)
                       const shortBarThreshold = 50; // pixels
 
+                      // Threshold for overlap detection (percentage points)
+                      const overlapThreshold = 2; // items within 2% are considered overlapping
+
+                      // Calculate vertical offsets for overlapping items
+                      const itemOffsets: number[] = [];
+                      for (let i = 0; i < itemsWithPositions.length; i++) {
+                        const current = itemsWithPositions[i].position;
+                        const currentEnd = current.leftPercent + (current.widthPercent || overlapThreshold);
+
+                        // Check for overlaps with previous items
+                        let maxOverlapOffset = -1;
+                        for (let j = 0; j < i; j++) {
+                          const prev = itemsWithPositions[j].position;
+                          const prevEnd = prev.leftPercent + (prev.widthPercent || overlapThreshold);
+
+                          // Check if ranges overlap
+                          const overlaps = !(currentEnd <= prev.leftPercent || current.leftPercent >= prevEnd);
+
+                          if (overlaps) {
+                            maxOverlapOffset = Math.max(maxOverlapOffset, itemOffsets[j]);
+                          }
+                        }
+
+                        // Assign next available offset row
+                        itemOffsets.push(maxOverlapOffset + 1);
+                      }
+
                       // Track label index for alternation (only for items that get labels)
                       let labelIndex = 0;
 
@@ -447,12 +474,18 @@ export default function Timeline({
                         const labelBelow = needsLabel ? (labelIndex % 2 === 0) : false;
                         if (needsLabel) labelIndex++;
 
+                        // Calculate vertical offset for this item (alternate above/below center)
+                        const offsetRow = itemOffsets[itemIndex];
+                        const offsetDirection = offsetRow % 2 === 0 ? 1 : -1; // even=down, odd=up
+                        const offsetAmount = Math.ceil(offsetRow / 2) * 14; // 14px per row
+                        const verticalOffset = offsetRow === 0 ? 0 : offsetDirection * offsetAmount;
+
                         if (position.isMilestone) {
                           return (
                             <div
                               key={item.id || itemIndex}
-                              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group cursor-pointer z-10"
-                              style={{ left: position.left }}
+                              className="absolute top-1/2 -translate-x-1/2 group cursor-pointer z-10"
+                              style={{ left: position.left, transform: `translateX(-50%) translateY(calc(-50% + ${verticalOffset}px))` }}
                             >
                               {/* Label above diamond */}
                               {!labelBelow && (
@@ -486,8 +519,8 @@ export default function Timeline({
                           return (
                             <div
                               key={item.id || itemIndex}
-                              className="absolute top-1/2 -translate-y-1/2 group cursor-pointer z-10"
-                              style={{ left: position.left, width: position.width }}
+                              className="absolute top-1/2 group cursor-pointer z-10"
+                              style={{ left: position.left, width: position.width, transform: `translateY(calc(-50% + ${verticalOffset}px))` }}
                             >
                               {/* Label above short bar */}
                               {isShortBar && !labelBelow && (

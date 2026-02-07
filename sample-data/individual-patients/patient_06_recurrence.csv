@@ -1,0 +1,21 @@
+Name,Category,Begin Date,End Date,Note
+Initial Diagnosis Stage I,Milestones,2020-03-01,,
+Lumpectomy,Milestones,2020-03-20,,Clear margins obtained
+Receptor Testing,Biomarker Assess,2020-03-25,,Triple negative
+Adjuvant AC-T Chemo,Line 1 treatment,2020-04-15,2020-09-01,Standard adjuvant regimen
+Radiation,Line 1 treatment,2020-09-15,2020-10-25,Whole breast radiation
+Year 1 Surveillance Clear,Milestones,2021-03-20,,NED
+Year 2 Surveillance Clear,Milestones,2022-03-20,,NED continued
+New Cough Develops,Milestones,2023-01-15,,
+CT Chest,Biomarker Assess,2023-01-22,,Multiple lung nodules
+Lung Biopsy,Biomarker Assess,2023-01-30,,Metastatic breast cancer confirmed
+Distant Recurrence,Complications,2023-02-01,,Stage IV disease
+PD-L1 Retesting,Biomarker Assess,2023-02-05,,CPS 8 positive
+BRCA Testing,Biomarker Assess,2023-02-05,,Negative
+Keytruda/Gemcitabine/Carboplatin,Line 2 treatment,2023-02-20,2023-08-15,First line for metastatic
+Restaging PR,Biomarker Assess,2023-05-20,,Partial response
+Progression on 1L,Complications,2023-08-20,,Liver mets appeared
+Trodelvy 2L Metastatic,Line 3 treatment,2023-09-01,2024-03-15,Sacituzumab govitecan
+Stable Disease,Biomarker Assess,2023-12-01,,Liver mets stable
+CNS Progression,Complications,2024-03-20,,Brain mets found
+SRS Brain,Line 3 treatment,2024-04-01,2024-04-05,Stereotactic radiosurgery 3 lesions

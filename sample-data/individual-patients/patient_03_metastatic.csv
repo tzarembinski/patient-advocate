@@ -1,0 +1,20 @@
+Name,Category,Begin Date,End Date,Note
+Back Pain Workup,Milestones,2023-03-10,,
+Spine MRI,Biomarker Assess,2023-03-15,,Multiple vertebral lesions
+Breast Mass Discovered,Milestones,2023-03-18,,5cm right breast mass
+Core Biopsy Breast,Biomarker Assess,2023-03-22,,Invasive ductal carcinoma
+ER/PR/HER2 Testing,Biomarker Assess,2023-03-25,,Triple negative confirmed
+PD-L1 Testing,Biomarker Assess,2023-03-25,,CPS score 25 - strongly positive
+CT Chest/Abdomen/Pelvis,Biomarker Assess,2023-03-28,,Liver and lung mets confirmed Stage IV
+BRCA Testing,Biomarker Assess,2023-04-01,,BRCA2 mutation detected
+Spine Radiation Palliative,Line 1 treatment,2023-04-05,2023-04-14,Pain control 10 fractions
+Keytruda/Abraxane 1L,Line 1 treatment,2023-04-17,2023-10-30,Pembrolizumab plus nab-paclitaxel
+3-Month Restaging CT,Biomarker Assess,2023-07-20,,Partial response 40% reduction
+6-Month Restaging CT,Biomarker Assess,2023-10-20,,Stable disease
+Disease Progression,Complications,2023-11-15,,New liver lesions on CT
+Olaparib 2L,Line 2 treatment,2023-11-25,2024-05-20,PARP inhibitor for BRCA2
+Restaging Shows Response,Biomarker Assess,2024-02-25,,Liver mets shrinking
+Brain MRI for Headaches,Biomarker Assess,2024-05-15,,Brain metastases found
+Brain Progression,Complications,2024-05-15,,CNS involvement
+Whole Brain Radiation,Line 2 treatment,2024-05-22,2024-06-05,WBRT 10 fractions
+Trodelvy 3L,Line 3 treatment,2024-06-15,2024-10-15,Sacituzumab govitecan
