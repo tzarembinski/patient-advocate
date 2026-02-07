@@ -413,156 +413,166 @@ export default function Timeline({
                     </p>
                   </div>
 
-                  {/* Timeline lane - increased height for overlapping items */}
-                  <div className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200 h-[72px] md:h-[80px]`}>
-                    {/* Vertical grid lines for months */}
-                    {months.map((month, mIndex) => {
-                      const position = getMonthPosition(month);
-                      return (
-                        <div
-                          key={mIndex}
-                          className="absolute top-0 h-full border-l border-gray-200"
-                          style={{ left: `${position}%` }}
-                        />
-                      );
-                    })}
+                  {/* Timeline lane - dynamic height based on waterfall stacking */}
+                  {(() => {
+                    // Pre-calculate waterfall rows to determine lane height
+                    const itemsWithPositions = items.map(item => ({
+                      item,
+                      position: getItemPosition(item)
+                    })).sort((a, b) => a.position.leftPercent - b.position.leftPercent);
 
-                    {/* Items in this category */}
-                    {(() => {
-                      // Sort items by position for proper label alternation
-                      const itemsWithPositions = items.map(item => ({
-                        item,
-                        position: getItemPosition(item)
-                      })).sort((a, b) => a.position.leftPercent - b.position.leftPercent);
+                    // Threshold for overlap detection (percentage points for diamonds)
+                    const overlapThreshold = 3;
 
-                      // Threshold for "short" bars that need external labels (2% of timeline width)
-                      const shortBarThreshold = 50; // pixels
+                    // Calculate waterfall row for each item (always cascade down)
+                    const itemRows: number[] = [];
+                    for (let i = 0; i < itemsWithPositions.length; i++) {
+                      const current = itemsWithPositions[i].position;
+                      const currentEnd = current.leftPercent + (current.widthPercent || overlapThreshold);
 
-                      // Threshold for overlap detection (percentage points)
-                      const overlapThreshold = 2; // items within 2% are considered overlapping
+                      // Find the maximum row of any overlapping previous item
+                      let maxOverlapRow = -1;
+                      for (let j = 0; j < i; j++) {
+                        const prev = itemsWithPositions[j].position;
+                        const prevEnd = prev.leftPercent + (prev.widthPercent || overlapThreshold);
 
-                      // Calculate vertical offsets for overlapping items
-                      const itemOffsets: number[] = [];
-                      for (let i = 0; i < itemsWithPositions.length; i++) {
-                        const current = itemsWithPositions[i].position;
-                        const currentEnd = current.leftPercent + (current.widthPercent || overlapThreshold);
+                        // Check if ranges overlap
+                        const overlaps = !(currentEnd <= prev.leftPercent || current.leftPercent >= prevEnd);
 
-                        // Check for overlaps with previous items
-                        let maxOverlapOffset = -1;
-                        for (let j = 0; j < i; j++) {
-                          const prev = itemsWithPositions[j].position;
-                          const prevEnd = prev.leftPercent + (prev.widthPercent || overlapThreshold);
-
-                          // Check if ranges overlap
-                          const overlaps = !(currentEnd <= prev.leftPercent || current.leftPercent >= prevEnd);
-
-                          if (overlaps) {
-                            maxOverlapOffset = Math.max(maxOverlapOffset, itemOffsets[j]);
-                          }
+                        if (overlaps) {
+                          maxOverlapRow = Math.max(maxOverlapRow, itemRows[j]);
                         }
-
-                        // Assign next available offset row
-                        itemOffsets.push(maxOverlapOffset + 1);
                       }
 
-                      // Track label index for alternation (only for items that get labels)
-                      let labelIndex = 0;
+                      // Place this item in the next row down
+                      itemRows.push(maxOverlapRow + 1);
+                    }
 
-                      return itemsWithPositions.map(({ item, position }, itemIndex) => {
-                        // Determine if this item needs an external label
-                        const needsLabel = position.isMilestone || position.widthPixels <= shortBarThreshold;
-                        const labelBelow = needsLabel ? (labelIndex % 2 === 0) : false;
-                        if (needsLabel) labelIndex++;
+                    const maxRows = Math.max(...itemRows, 0) + 1;
+                    const rowHeight = 28; // Height per row (bar height)
+                    const baseLaneHeight = 36; // Minimum lane height
+                    const laneHeight = Math.max(baseLaneHeight, maxRows * rowHeight + 8);
 
-                        // Calculate vertical offset for this item (alternate above/below center)
-                        const offsetRow = itemOffsets[itemIndex];
-                        const offsetDirection = offsetRow % 2 === 0 ? 1 : -1; // even=down, odd=up
-                        const offsetAmount = Math.ceil(offsetRow / 2) * 14; // 14px per row
-                        const verticalOffset = offsetRow === 0 ? 0 : offsetDirection * offsetAmount;
-
-                        if (position.isMilestone) {
+                    return (
+                      <div
+                        className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200`}
+                        style={{ height: `${laneHeight}px` }}
+                      >
+                        {/* Vertical grid lines for months */}
+                        {months.map((month, mIndex) => {
+                          const monthPos = getMonthPosition(month);
                           return (
                             <div
-                              key={item.id || itemIndex}
-                              className="absolute top-1/2 -translate-x-1/2 group cursor-pointer z-10"
-                              style={{ left: position.left, transform: `translateX(-50%) translateY(calc(-50% + ${verticalOffset}px))` }}
-                            >
-                              {/* Label above diamond */}
-                              {!labelBelow && (
-                                <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
-                                    {getFirstWord(item.name)}
-                                  </span>
-                                </div>
-                              )}
-
-                              {/* Diamond shape with hover effect */}
-                              <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}></div>
-
-                              {/* Label below diamond */}
-                              {labelBelow && (
-                                <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
-                                    {getFirstWord(item.name)}
-                                  </span>
-                                </div>
-                              )}
-
-                              {/* Hover tooltip */}
-                              {renderTooltipContent(item, position, category)}
-                            </div>
+                              key={mIndex}
+                              className="absolute top-0 h-full border-l border-gray-200"
+                              style={{ left: `${monthPos}%` }}
+                            />
                           );
-                        } else {
-                          // Duration bar with hover effect
-                          const isShortBar = position.widthPixels <= shortBarThreshold;
+                        })}
 
-                          return (
-                            <div
-                              key={item.id || itemIndex}
-                              className="absolute top-1/2 group cursor-pointer z-10"
-                              style={{ left: position.left, width: position.width, transform: `translateY(calc(-50% + ${verticalOffset}px))` }}
-                            >
-                              {/* Label above short bar */}
-                              {isShortBar && !labelBelow && (
-                                <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
-                                    {getFirstWord(item.name)}
-                                  </span>
-                                </div>
-                              )}
+                        {/* Items in this category with waterfall stacking */}
+                        {(() => {
+                          // Threshold for "short" bars that need external labels
+                          const shortBarThreshold = 50; // pixels
 
-                              {/* Bar with subtle hover effect */}
-                              <div
-                                className={`relative h-7 md:h-8 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105 ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}
-                                style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
-                              >
-                                {/* Show text on bar for larger bars */}
-                                {!isShortBar && (
-                                  <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
-                                    <div className="text-[10px] md:text-xs font-bold text-gray-800 truncate px-2">
-                                      {position.widthPixels > 80 ? truncateName(item.name) : item.name.substring(0, 1)}
+                          // Track label index for alternation (only for items that get labels)
+                          let labelIndex = 0;
+
+                          return itemsWithPositions.map(({ item, position }, itemIndex) => {
+                            // Determine if this item needs an external label
+                            const needsLabel = position.isMilestone || position.widthPixels <= shortBarThreshold;
+                            const labelBelow = needsLabel ? (labelIndex % 2 === 0) : false;
+                            if (needsLabel) labelIndex++;
+
+                            // Waterfall: position from top, each row drops down
+                            const row = itemRows[itemIndex];
+                            const topOffset = 4 + (row * rowHeight); // 4px padding from top
+
+                            if (position.isMilestone) {
+                              return (
+                                <div
+                                  key={item.id || itemIndex}
+                                  className="absolute -translate-x-1/2 group cursor-pointer z-10"
+                                  style={{ left: position.left, top: `${topOffset}px` }}
+                                >
+                                  {/* Label above diamond (only for row 0) */}
+                                  {!labelBelow && row === 0 && (
+                                    <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                      <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                        {getFirstWord(item.name)}
+                                      </span>
                                     </div>
-                                  </div>
-                                )}
-                              </div>
+                                  )}
 
-                              {/* Label below short bar */}
-                              {isShortBar && labelBelow && (
-                                <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                                  <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
-                                    {getFirstWord(item.name)}
-                                  </span>
+                                  {/* Diamond shape with hover effect */}
+                                  <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}></div>
+
+                                  {/* Label below diamond or for stacked items */}
+                                  {(labelBelow || row > 0) && (
+                                    <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                      <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                        {getFirstWord(item.name)}
+                                      </span>
+                                    </div>
+                                  )}
+
+                                  {/* Hover tooltip */}
+                                  {renderTooltipContent(item, position, category)}
                                 </div>
-                              )}
+                              );
+                            } else {
+                              // Duration bar with hover effect
+                              const isShortBar = position.widthPixels <= shortBarThreshold;
 
-                              {/* Hover tooltip */}
-                              {renderTooltipContent(item, position, category)}
-                            </div>
-                          );
-                        }
-                      });
-                    })()}
-                  </div>
+                              return (
+                                <div
+                                  key={item.id || itemIndex}
+                                  className="absolute group cursor-pointer z-10"
+                                  style={{ left: position.left, width: position.width, top: `${topOffset}px` }}
+                                >
+                                  {/* Label above short bar (only for row 0) */}
+                                  {isShortBar && !labelBelow && row === 0 && (
+                                    <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                      <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                        {getFirstWord(item.name)}
+                                      </span>
+                                    </div>
+                                  )}
+
+                                  {/* Bar with subtle hover effect */}
+                                  <div
+                                    className={`relative h-6 md:h-7 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105 ${item.note ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}
+                                    style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
+                                  >
+                                    {/* Show text on bar for larger bars */}
+                                    {!isShortBar && (
+                                      <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
+                                        <div className="text-[10px] md:text-xs font-bold text-gray-800 truncate px-2">
+                                          {position.widthPixels > 80 ? truncateName(item.name) : item.name.substring(0, 1)}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Label below short bar or for stacked items */}
+                                  {isShortBar && (labelBelow || row > 0) && (
+                                    <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                      <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                        {getFirstWord(item.name)}
+                                      </span>
+                                    </div>
+                                  )}
+
+                                  {/* Hover tooltip */}
+                                  {renderTooltipContent(item, position, category)}
+                                </div>
+                              );
+                            }
+                          });
+                        })()}
+                      </div>
+                    );
+                  })()}
                 </div>
               );
             })}
