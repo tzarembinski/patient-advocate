@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { format, differenceInDays, addDays, startOfMonth, eachMonthOfInterval } from "date-fns";
 import { TimelineItem } from "@/app/page";
 
@@ -68,6 +68,8 @@ export default function Timeline({
   const [containerWidth, setContainerWidth] = useState(800);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteText, setNoteText] = useState("");
+  const [activeTooltipId, setActiveTooltipId] = useState<string | null>(null);
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -98,6 +100,20 @@ export default function Timeline({
     e.stopPropagation();
     setEditingNoteId(null);
     setNoteText("");
+  };
+
+  const handleTooltipEnter = (itemId: string) => {
+    if (tooltipTimeoutRef.current) {
+      clearTimeout(tooltipTimeoutRef.current);
+      tooltipTimeoutRef.current = null;
+    }
+    setActiveTooltipId(itemId);
+  };
+
+  const handleTooltipLeave = () => {
+    tooltipTimeoutRef.current = setTimeout(() => {
+      setActiveTooltipId(null);
+    }, 150); // Small delay to allow moving to tooltip
   };
 
   const timelineConfig = useMemo(() => {
@@ -238,10 +254,15 @@ export default function Timeline({
     const isEditingThisNote = editingNoteId === item.id;
     const wordCount = countWords(noteText);
     const isOverLimit = wordCount > 30;
+    const isVisible = activeTooltipId === item.id;
 
     return (
-      <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]">
-        <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl text-sm pointer-events-auto min-w-[200px] max-w-[280px]">
+      <div
+        className={`absolute top-full mt-3 left-1/2 -translate-x-1/2 transition-all duration-200 z-[100] ${isVisible ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+        onMouseEnter={() => handleTooltipEnter(item.id)}
+        onMouseLeave={handleTooltipLeave}
+      >
+        <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl text-sm min-w-[200px] max-w-[280px]">
           <div className="font-bold mb-1">{item.name}</div>
           <div className="text-gray-300 text-xs">
             {position.duration === 0 || position.isMilestone
@@ -449,13 +470,15 @@ export default function Timeline({
                     }
 
                     const maxRows = Math.max(...itemRows, 0) + 1;
-                    const rowHeight = 24; // Height per row (matches bar height h-6) - no gap between rows
+                    const barHeight = 24; // Bar height (h-6)
+                    const rowGap = Math.round(barHeight * 0.05); // 5% gap between rows
+                    const rowHeight = barHeight + rowGap; // Total row height including gap
                     const baseLaneHeight = 32; // Minimum lane height
                     const laneHeight = Math.max(baseLaneHeight, maxRows * rowHeight + 8);
 
                     return (
                       <div
-                        className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200`}
+                        className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200 overflow-hidden`}
                         style={{ height: `${laneHeight}px` }}
                       >
                         {/* Vertical grid lines for months */}
@@ -489,13 +512,16 @@ export default function Timeline({
                             const topOffset = 4 + (row * rowHeight); // Rows touch - no gap
 
                             if (position.isMilestone) {
+                              const isActive = activeTooltipId === item.id;
                               return (
                                 <div
                                   key={item.id || itemIndex}
-                                  className="absolute -translate-x-1/2 group cursor-pointer z-10"
+                                  className="absolute -translate-x-1/2 cursor-pointer z-10"
                                   style={{ left: position.left, top: `${topOffset}px` }}
+                                  onMouseEnter={() => handleTooltipEnter(item.id)}
+                                  onMouseLeave={handleTooltipLeave}
                                 >
-                                  {/* Label above diamond (only for row 0) */}
+                                  {/* Label above diamond (only for row 0, not stacked) */}
                                   {!labelBelow && row === 0 && (
                                     <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
                                       <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
@@ -504,12 +530,21 @@ export default function Timeline({
                                     </div>
                                   )}
 
-                                  {/* Diamond shape with hover effect */}
-                                  <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 group-hover:scale-125 group-hover:shadow-xl`}></div>
-
-                                  {/* Label below diamond or for stacked items */}
-                                  {(labelBelow || row > 0) && (
+                                  {/* Label below diamond (only for row 0 when labelBelow) */}
+                                  {labelBelow && row === 0 && (
                                     <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                      <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
+                                        {getFirstWord(item.name)}
+                                      </span>
+                                    </div>
+                                  )}
+
+                                  {/* Diamond shape with hover effect */}
+                                  <div className={`w-4 h-4 md:w-5 md:h-5 ${colors.border} border-2 bg-white rotate-45 shadow-md transition-all duration-200 ${isActive ? 'scale-125 shadow-xl' : 'hover:scale-125 hover:shadow-xl'}`}></div>
+
+                                  {/* Label to the RIGHT for stacked diamonds (row > 0) */}
+                                  {row > 0 && (
+                                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 whitespace-nowrap">
                                       <span className={`text-[9px] md:text-[10px] font-medium ${colors.text} opacity-80`}>
                                         {getFirstWord(item.name)}
                                       </span>
@@ -523,12 +558,15 @@ export default function Timeline({
                             } else {
                               // Duration bar with hover effect
                               const isShortBar = position.widthPixels <= shortBarThreshold;
+                              const isActive = activeTooltipId === item.id;
 
                               return (
                                 <div
                                   key={item.id || itemIndex}
-                                  className="absolute group cursor-pointer z-10"
+                                  className="absolute cursor-pointer z-10"
                                   style={{ left: position.left, width: position.width, top: `${topOffset}px` }}
+                                  onMouseEnter={() => handleTooltipEnter(item.id)}
+                                  onMouseLeave={handleTooltipLeave}
                                 >
                                   {/* Label above short bar (only for row 0) */}
                                   {isShortBar && !labelBelow && row === 0 && (
@@ -541,7 +579,7 @@ export default function Timeline({
 
                                   {/* Bar with subtle hover effect */}
                                   <div
-                                    className={`relative h-6 md:h-7 rounded shadow-md border-2 ${colors.border} transition-all duration-200 group-hover:shadow-xl group-hover:scale-105`}
+                                    className={`relative h-6 md:h-7 rounded shadow-md border-2 ${colors.border} transition-all duration-200 ${isActive ? 'shadow-xl scale-105' : 'hover:shadow-xl hover:scale-105'}`}
                                     style={{ backgroundColor: `rgba(${colors.rgb}, 0.5)` }}
                                   >
                                     {/* Show text on bar for larger bars */}
