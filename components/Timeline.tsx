@@ -473,8 +473,10 @@ export default function Timeline({
                     const barHeight = 24; // Bar height (h-6)
                     const rowGap = Math.round(barHeight * 0.05); // 5% gap between rows
                     const rowHeight = barHeight + rowGap; // Total row height including gap
-                    const baseLaneHeight = 32; // Minimum lane height
-                    const laneHeight = Math.max(baseLaneHeight, maxRows * rowHeight + 8);
+                    const baseLaneHeight = 40; // Minimum lane height (increased by 25%)
+                    const totalStackHeight = maxRows * rowHeight;
+                    const laneHeight = Math.max(baseLaneHeight, Math.round((totalStackHeight + 16) * 1.25)); // 25% wider
+                    const verticalCenterOffset = (laneHeight - totalStackHeight) / 2; // Center the stack vertically
 
                     return (
                       <div
@@ -507,9 +509,9 @@ export default function Timeline({
                             const labelBelow = needsLabel ? (labelIndex % 2 === 0) : false;
                             if (needsLabel) labelIndex++;
 
-                            // Waterfall: position from top, each row drops down
+                            // Waterfall: position from top, centered vertically in lane
                             const row = itemRows[itemIndex];
-                            const topOffset = 4 + (row * rowHeight); // Rows touch - no gap
+                            const topOffset = verticalCenterOffset + (row * rowHeight);
 
                             if (position.isMilestone) {
                               const isActive = activeTooltipId === item.id;
