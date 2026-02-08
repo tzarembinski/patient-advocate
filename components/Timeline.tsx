@@ -478,7 +478,7 @@ export default function Timeline({
 
                     return (
                       <div
-                        className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200 overflow-hidden`}
+                        className={`flex-1 relative ${colors.bg} border-t border-b border-gray-200`}
                         style={{ height: `${laneHeight}px` }}
                       >
                         {/* Vertical grid lines for months */}
